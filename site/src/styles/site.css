@@ -40,8 +40,6 @@
   --measure-prose: 65ch;
   --gutter: clamp(1.5rem, 5vw, 4.5rem);
   --section-space: clamp(4.5rem, 9vw, 8rem);
-  --snap-inset: clamp(3rem, 14svh, 10rem);
-  --control-menu: clamp(5.5rem, 9vw, 7.5rem);
 }
 
 /* Misc ------------------------------------------------------------------ */
@@ -360,7 +358,6 @@ h2 {
 
 :where(.reveal-section) {
   padding: var(--section-space) var(--gutter);
-  scroll-margin-top: 1rem;
 }
 
 main {
@@ -371,15 +368,9 @@ main {
   counter-increment: section;
 }
 
-@media (prefers-reduced-motion:no-preference) {
-  html {
-    scroll-snap-type: y proximity;
-    scroll-padding-block: var(--snap-inset);
-  }
-
-  main>.reveal-section {
-    scroll-snap-align: start;
-    scroll-margin-block-start: var(--snap-inset);
+@media (prefers-reduced-motion: no-preference) {
+  .reveal-section {
+      scroll-margin-block-start: clamp(6rem, 22svh, 12rem);
   }
 }
 
