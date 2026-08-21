@@ -4,7 +4,7 @@ An Astro-based portfolio for Mohan Kumar: design, software and digital products.
 
 ## Requirements
 
-- Node.js `22.12` or newer
+- Node.js `22.19` or newer (see `.nvmrc`)
 - npm
 
 Install dependencies from this directory:
