@@ -54,7 +54,12 @@ import SiteFooter from "../components/SiteFooter.astro";
         </div>
         <figure class="hero-art">
           <img
-            src="assets/hero-art.webp"
+            src="/assets/hero-art.webp"
+            width="624"
+            height="624"
+            loading="eager"
+            decoding="async"
+            fetchpriority="high"
             alt="Abstract three-dimensional composition of a glass sheet, teal orb, lime loop and pink folded form."
           />
         </figure>
@@ -175,12 +180,20 @@ import SiteFooter from "../components/SiteFooter.astro";
             <figure class="about-portrait">
               <img
                 class="about-portrait__base"
-                src="assets/potrait.webp"
+                src="/assets/potrait.webp"
+                width="360"
+                height="440"
+                loading="lazy"
+                decoding="async"
                 alt="Portrait of Mohan Kumar"
               />
               <img
                 class="about-portrait__colour"
-                src="assets/potrait.webp"
+                src="/assets/potrait.webp"
+                width="360"
+                height="440"
+                loading="lazy"
+                decoding="async"
                 alt=""
                 aria-hidden="true"
               />

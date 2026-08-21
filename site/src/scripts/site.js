@@ -32,27 +32,12 @@ const motionDuration = {
   layout: cssMilliseconds('--duration-layout', 360),
 };
 
-const savedTheme = () => {
-  try {
-    const value = window.localStorage.getItem(themeStorageKey);
-    return value === 'light' || value === 'dark' ? value : null;
-  } catch {
-    return null;
-  }
-};
+const storedTheme = root.dataset.theme === 'light' || root.dataset.theme === 'dark'
+  ? root.dataset.theme
+  : null;
+let themeOverride = storedTheme;
 
-const saveTheme = (theme) => {
-  try {
-    window.localStorage.setItem(themeStorageKey, theme);
-  } catch {
-    // The current session still honours the selected theme if storage is unavailable.
-  }
-};
-
-const storedTheme = savedTheme();
-if (storedTheme) root.dataset.theme = storedTheme;
-
-const activeTheme = () => root.dataset.theme || (systemDark.matches ? 'dark' : 'light');
+const activeTheme = () => themeOverride || (systemDark.matches ? 'dark' : 'light');
 
 const syncThemeControls = () => {
   const isDark = activeTheme() === 'dark';
@@ -63,14 +48,19 @@ const syncThemeControls = () => {
 };
 
 const setTheme = (theme) => {
+  themeOverride = theme;
   root.dataset.theme = theme;
-  saveTheme(theme);
+  try {
+    localStorage.setItem(themeStorageKey, theme);
+  } catch {
+    // The current session still honours the selected theme if storage is unavailable.
+  }
   syncThemeControls();
 };
 
 syncThemeControls();
 listen(systemDark, 'change', () => {
-  if (!root.dataset.theme) syncThemeControls();
+  if (!themeOverride) syncThemeControls();
 });
 
 listen(trigger, 'click', () => {

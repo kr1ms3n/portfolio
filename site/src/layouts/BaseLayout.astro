@@ -20,9 +20,42 @@ import { ClientRouter } from 'astro:transitions';
     <meta name="color-scheme" content="light dark" />
     <meta name="description" content={description} />
     <title>{title}</title>
+    <script is:inline>
+      try {
+        const theme = localStorage.getItem('mohanverse-theme');
+        if (theme === 'light' || theme === 'dark') {
+          document.documentElement.dataset.theme = theme;
+        }
+      } catch {
+        // Private browsing or blocked storage falls back to system preference.
+      }
+    </script>
+    <link
+      rel="preload"
+      as="image"
+      href="/assets/hero-art.webp"
+      type="image/webp"
+      fetchpriority="high"
+    />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Geist:wght@400;500;600;700;800&family=Matemasie&display=swap" rel="stylesheet" />
+    <link
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Geist:wght@400;500;600;700;800&family=Matemasie&display=swap"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Geist:wght@400;500;600;700;800&family=Matemasie&display=swap"
+      rel="stylesheet"
+      media="print"
+      onload="this.media='all'"
+    />
+    <noscript>
+      <link
+        href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Geist:wght@400;500;600;700;800&family=Matemasie&display=swap"
+        rel="stylesheet"
+      />
+    </noscript>
     <ClientRouter />
   </head>
   <body>
