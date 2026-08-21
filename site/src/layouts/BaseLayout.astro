@@ -1,0 +1,32 @@
+---
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = 'Mohan Kumar — Design, Software, Products',
+  description = 'Mohan Kumar — design, software and products.',
+} = Astro.props;
+
+import '../styles/site.css';
+import { ClientRouter } from 'astro:transitions';
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="description" content={description} />
+    <title>{title}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Geist:wght@400;500;600;700;800&family=Matemasie&display=swap" rel="stylesheet" />
+    <ClientRouter />
+  </head>
+  <body>
+    <slot />
+    <script src="../scripts/site.js"></script>
+  </body>
+</html>

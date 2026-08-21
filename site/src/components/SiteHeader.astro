@@ -1,0 +1,307 @@
+<header transition:persist="site-header">
+  <button class="floating-menu" type="button" aria-label="Open site menu" aria-controls="site-menu" aria-expanded="false"><span class="floating-menu__surface"><svg class="floating-menu__blob" viewBox="0 0 100 100" aria-hidden="true"><path id="menu-blob-path" d="M39 8.95 Q50 6 61 8.95 Q72 11.89 80.05 19.95 Q88.11 28 91.05 39 Q94 50 91.05 61 Q88.11 72 80.05 80.05 Q72 88.11 61 91.05 Q50 94 39 91.05 Q28 88.11 19.95 80.05 Q11.89 72 8.95 61 Q6 50 8.95 39 Q11.89 28 19.95 19.95 Q28 11.89 39 8.95 Z"></path></svg><span class="floating-menu__content"><span class="floating-menu__icon" aria-hidden="true"><i></i><i></i><i></i></span><span class="floating-menu__label">MENU</span></span></span></button>
+  <aside class="menu-overlay" id="site-menu" role="dialog" aria-modal="true" aria-labelledby="site-menu-title" hidden><div class="menu-overlay__content"><p class="eyebrow type-label" id="site-menu-title">NAVIGATION / 2026</p><nav class="menu-overlay__links"><a href="#top" data-menu-link>HOME <span aria-hidden="true"></span></a><a href="#what-i-do" data-menu-link>PRACTICE <span aria-hidden="true"></span></a><a href="#about" data-menu-link>ABOUT <span aria-hidden="true"></span></a><a href="#client-work" data-menu-link>CLIENT WORK <span aria-hidden="true"></span></a><a href="#artifacts" data-menu-link>ARTIFACTS <span aria-hidden="true"></span></a><a href="#lab" data-menu-link>LAB <span aria-hidden="true"></span></a><a href="#contact" data-menu-link>CONTACT <span aria-hidden="true"></span></a></nav><button class="theme-switch" data-theme-toggle type="button" aria-label="Switch to dark mode" aria-pressed="false"><span class="theme-switch__light">LIGHT</span><span class="theme-switch__track" aria-hidden="true"></span><span class="theme-switch__dark">DARK</span></button><button class="menu-overlay__close" type="button" aria-label="Close site menu"><span aria-hidden="true">×</span> CLOSE MENU</button></div></aside>
+
+<style is="global">
+.floating-menu {
+  --menu-size: var(--control-menu);
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: var(--z-menu);
+  display: block;
+  width: var(--menu-size);
+  height: var(--menu-size);
+  flex: 0 0 var(--menu-size);
+  padding: 0;
+  border: 0;
+  background: 0 0;
+  cursor: grab;
+  touch-action: none;
+  view-transition-name: menu-control;
+  view-transition-class: menu-control;
+  opacity: 0;
+  transition: opacity var(--duration-fast) ease;
+}
+
+.floating-menu.is-ready {
+  opacity: 1;
+}
+
+.floating-menu:focus-visible {
+  outline: 0;
+}
+
+.floating-menu:focus-visible .floating-menu__blob path {
+  stroke: var(--copy);
+  stroke-width: 2;
+}
+
+.floating-menu.is-dragging {
+  cursor: grabbing;
+}
+
+.floating-menu.is-snapping {
+  cursor: default;
+  transition: left var(--duration-layout) var(--ease-out), top var(--duration-layout) var(--ease-out), opacity var(--duration-fast) ease;
+}
+
+.floating-menu__surface {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  background: 0 0;
+  color: var(--on-signal);
+}
+
+.floating-menu__blob,
+.floating-menu__content {
+  grid-area: 1/1;
+}
+
+.floating-menu__blob {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.floating-menu__blob path {
+  fill: var(--signal);
+  stroke: var(--signal-edge);
+  stroke-width: .8;
+}
+
+.floating-menu__content {
+  z-index: var(--z-content);
+  display: grid;
+  place-content: center;
+  gap: .45rem;
+  padding: 1.5rem;
+}
+
+.floating-menu.is-whomp .floating-menu__surface {
+  animation: menu-whomp var(--duration-ui) var(--ease-out);
+}
+
+.floating-menu.is-whomp .floating-menu__blob path {
+  animation: menu-impact var(--duration-ui) ease-out;
+}
+
+.floating-menu__icon {
+  display: grid;
+  gap: .2rem;
+  width: 1.15rem;
+}
+
+.floating-menu__icon i {
+  display: block;
+  height: .1rem;
+  background: currentColor;
+}
+
+.floating-menu__label {
+  font: 500 .625rem/1 var(--font-mono);
+  letter-spacing: .08em;
+}
+
+.menu-overlay {
+  position: fixed;
+  z-index: var(--z-overlay);
+  inset: 0;
+  display: grid;
+  place-items: center;
+  height: 100vh;
+  height: 100dvh;
+  padding: max(1rem, env(safe-area-inset-top)) max(1rem, env(safe-area-inset-right)) max(1rem, env(safe-area-inset-bottom)) max(1rem, env(safe-area-inset-left));
+  overflow: hidden;
+  overscroll-behavior: contain;
+  background: color-mix(in oklch, var(--canvas) 20%, transparent);
+  color: var(--surface-copy);
+}
+
+.menu-overlay[hidden] {
+  display: none;
+}
+
+.menu-overlay__content {
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  width: min(75vw, 45rem);
+  height: min(90dvh, 55rem);
+  max-height: 100%;
+  padding: clamp(1.25rem, 3.5vw, 2.5rem);
+  overflow-y: auto;
+  scrollbar-width: none;
+  border: 1px solid color-mix(in oklch, var(--tone-mist) 52%, transparent);
+  border-radius: 1.5rem;
+  background: radial-gradient(circle at 18% 8%, color-mix(in oklch, var(--tone-mist) 32%, transparent), transparent 35%), radial-gradient(circle at 82% 100%, color-mix(in oklch, var(--color-teal) 22%, transparent), transparent 48%), linear-gradient(145deg, color-mix(in oklch, var(--surface) 78%, transparent), color-mix(in oklch, var(--interactive-surface) 58%, transparent));
+  box-shadow: inset 0 1px 0 color-mix(in oklch, var(--tone-mist) 68%, transparent), inset 0 -1.25rem 2.5rem color-mix(in oklch, var(--copy) 14%, transparent), 0 1.75rem 5rem color-mix(in oklch, var(--copy) 34%, transparent);
+  -webkit-backdrop-filter: blur(2rem) saturate(155%);
+  backdrop-filter: blur(2rem) saturate(155%);
+  view-transition-name: none;
+  view-transition-class: menu-control;
+}
+
+.menu-overlay__content::-webkit-scrollbar {
+  display: none;
+}
+
+.menu-overlay__links {
+  display: grid;
+  counter-reset: menu-link;
+  gap: 0;
+  margin: 0 0 2rem;
+  border-block: 1px solid color-mix(in oklch, var(--tone-mist) 34%, transparent);
+}
+
+.menu-overlay__links a {
+  display: flex;
+  justify-content: space-between;
+  gap: 1.25rem;
+  padding: clamp(.65rem, 1.2vw, .95rem) 0;
+  border: 0;
+  border-radius: 0;
+  background: 0 0;
+  font-size: clamp(2rem, 5vw, 4rem);
+  font-weight: 800;
+  letter-spacing: -.07em;
+  line-height: .9;
+  text-decoration: none;
+  counter-increment: menu-link;
+  transition: color var(--duration-ui) ease, transform var(--duration-ui) ease;
+}
+
+.menu-overlay__links a+a {
+  border-top: 1px solid color-mix(in oklch, var(--tone-mist) 22%, transparent);
+}
+
+.menu-overlay__links a:focus-visible,
+.menu-overlay__links a:hover {
+  outline: 0;
+  color: var(--color-teal);
+  transform: translateX(.2rem);
+}
+
+.menu-overlay__links span,
+.theme-switch {
+  align-self: end;
+  font: 500 .75rem/1 var(--font-mono);
+  letter-spacing: .08em;
+}
+
+.theme-switch {
+  display: grid;
+  grid-template-columns: auto 5rem auto;
+  align-items: center;
+  gap: .75rem;
+  align-self: center;
+  margin-bottom: 1.25rem;
+  padding: 0;
+  border: 0;
+  background: 0 0;
+  cursor: pointer;
+  font: 500 .6875rem/1 var(--font-mono);
+}
+
+.menu-overlay__links span::before {
+  content: counter(menu-link, decimal-leading-zero);
+}
+
+.theme-switch__track {
+  display: block;
+  width: 5rem;
+  height: 1.5rem;
+  padding: .2rem;
+  border: 1px solid var(--rule-strong);
+  border-radius: 50vw;
+  background: linear-gradient(90deg, var(--canvas), var(--signal), var(--copy));
+  background: linear-gradient(90deg in oklch, var(--canvas), var(--signal), var(--copy));
+}
+
+.theme-switch__track::after {
+  display: block;
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50%;
+  background: var(--signal);
+  box-shadow: 0 0 0 1px var(--copy);
+  content: "";
+  transform: translateX(0);
+  transition: transform var(--duration-ui) ease;
+}
+
+.theme-switch[aria-pressed=true] .theme-switch__track::after {
+  transform: translateX(3.55rem);
+}
+
+.theme-switch[aria-pressed=false] .theme-switch__dark,
+.theme-switch[aria-pressed=true] .theme-switch__light {
+  opacity: .5;
+}
+
+.menu-overlay__close {
+  display: flex;
+  align-items: center;
+  gap: .7rem;
+  width: fit-content;
+  align-self: center;
+  margin: auto 0 0;
+  padding: 0;
+  border: 0;
+  background: 0 0;
+  cursor: pointer;
+  font: 500 .75rem/1 var(--font-mono);
+  letter-spacing: .08em;
+}
+
+.menu-overlay__close span {
+  font: 2rem/.5 var(--font-display);
+}
+
+body.menu-open {
+  overflow: hidden;
+}
+
+body.menu-open .floating-menu {
+  opacity: 0;
+  pointer-events: none;
+  view-transition-name: none;
+}
+
+body.menu-open .menu-overlay__content {
+  view-transition-name: menu-control;
+}
+
+@keyframes menu-whomp {
+  0%,
+  to {
+    transform: scale(1);
+  }
+
+  36% {
+    transform: scale(1.07, .94);
+  }
+
+  65% {
+    transform: scale(.985, 1.025);
+  }
+}
+
+@keyframes menu-impact {
+  0%,
+  to {
+    stroke-width: .8;
+  }
+
+  36% {
+    stroke-width: 2;
+  }
+
+  65% {
+    stroke-width: 1.1;
+  }
+}
+</style>
+</header>

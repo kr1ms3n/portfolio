@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title">
+  <title>Mohanverse</title>
+  <rect width="64" height="64" rx="16" fill="#00cbbd"/>
+  <path d="M14 48V16h8l10 14 10-14h8v32h-8V29L32 43 22 29v19Z" fill="#062326"/>
+</svg>

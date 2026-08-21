@@ -1,0 +1,353 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import SiteHeader from "../components/SiteHeader.astro";
+import SiteFooter from "../components/SiteFooter.astro";
+---
+
+<BaseLayout>
+  <SiteHeader />
+  <main transition:name="page" transition:animate="fade">
+    <section class="hero reveal-section" id="top">
+      <div class="hero-top">
+        <a href="#top" class="wordmark chaos-piece link-underline">MOHAN KUMAR</a>
+        <div class="hero-top__meta">
+          <span class="hero-top__label chaos-piece"
+            >DESIGN · SOFTWARE · PRODUCTS</span
+          >
+          <button
+            class="theme-icon-toggle chaos-piece"
+            data-theme-toggle
+            type="button"
+            aria-label="Switch to dark mode"
+            aria-pressed="false"
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <circle class="theme-icon-toggle__sun" cx="12" cy="12" r="4"
+              ></circle>
+              <path
+                class="theme-icon-toggle__moon"
+                d="M18.5 15.2A7.5 7.5 0 0 1 8.8 5.5 7.5 7.5 0 1 0 18.5 15.2Z"
+              >
+              </path>
+            </svg>
+          </button>
+        </div>
+      </div>
+      <p class="eyebrow type-label chaos-piece" data-section-index>INTRODUCTION</p>
+      <div class="hero-grid">
+        <div>
+          <h1 class="chaos-piece title">
+            MAKE <span class="chromatic" data-chromatic="IDEAS"
+              ><span class="chromatic__letter" data-letter="I">I</span><span
+                class="chromatic__letter"
+                data-letter="D">D</span
+              ><span class="chromatic__letter" data-letter="E">E</span><span
+                class="chromatic__letter"
+                data-letter="A">A</span
+              ><span class="chromatic__letter" data-letter="S">S</span></span
+            ><br />MATTER.
+          </h1>
+          <p class="lede lead copy-width chaos-piece">
+            I transform visual ideas, uncertain challenges and emerging
+            technology into purposeful digital products and experiences.
+          </p>
+        </div>
+        <figure class="hero-art">
+          <img
+            src="assets/hero-art.webp"
+            alt="Abstract three-dimensional composition of a glass sheet, teal orb, lime loop and pink folded form."
+          />
+        </figure>
+      </div>
+    </section>
+
+    <section class="practice reveal-section" id="what-i-do">
+      <p class="eyebrow type-label chaos-piece" data-section-index>PRACTICE</p>
+      <h2 class="chaos-piece">
+        I work across<br /><span class="chromatic" data-chromatic="visual"
+          ><span class="chromatic__letter" data-letter="v">v</span><span
+            class="chromatic__letter"
+            data-letter="i">i</span
+          ><span class="chromatic__letter" data-letter="s">s</span><span
+            class="chromatic__letter"
+            data-letter="u">u</span
+          ><span class="chromatic__letter" data-letter="a">a</span><span
+            class="chromatic__letter"
+            data-letter="l">l</span
+          ></span
+        > thinking,<br />software and systems.
+      </h2>
+      <div class="capabilities">
+        <article class="capability">
+          <span class="capability__index type-label">01</span>
+          <svg
+            class="capability__icon capability__icon--visual"
+            viewBox="0 0 64 64"
+            aria-hidden="true"
+          >
+            <circle class="capability__orbit" cx="32" cy="32" r="22"></circle>
+            <path class="capability__arc" d="M12 39C21 17 42 11 54 24"></path>
+            <circle class="capability__core" cx="32" cy="32" r="5"></circle>
+          </svg>
+          <h3 class="chaos-piece">VISUAL</h3>
+          <p class="note chaos-piece">
+            Identity, interfaces, motion and digital form.
+          </p>
+        </article>
+        <article class="capability">
+          <span class="capability__index type-label">02</span>
+          <svg
+            class="capability__icon capability__icon--software"
+            viewBox="0 0 64 64"
+            aria-hidden="true"
+          >
+            <path
+              class="capability__bracket capability__bracket--left"
+              d="M25 14L12 32l13 18"></path>
+            <path
+              class="capability__bracket capability__bracket--right"
+              d="M39 14l13 18-13 18"></path>
+            <path class="capability__slash" d="M36 12L28 52"></path>
+          </svg>
+          <h3 class="chaos-piece">SOFTWARE</h3>
+          <p class="note chaos-piece">
+            Websites, applications and dependable systems.
+          </p>
+        </article>
+        <article class="capability">
+          <span class="capability__index type-label">03</span>
+          <svg
+            class="capability__icon capability__icon--product"
+            viewBox="0 0 64 64"
+            aria-hidden="true"
+          >
+            <path class="capability__link" d="M20 22L32 14l12 8v20L32 50l-12-8Z"
+            ></path>
+            <circle
+              class="capability__node capability__node--top"
+              cx="32"
+              cy="14"
+              r="4"></circle>
+            <circle
+              class="capability__node capability__node--left"
+              cx="20"
+              cy="42"
+              r="4"></circle>
+            <circle
+              class="capability__node capability__node--right"
+              cx="44"
+              cy="42"
+              r="4"></circle>
+          </svg>
+          <h3 class="chaos-piece">PRODUCT</h3>
+          <p class="note chaos-piece">
+            Workflows, prototypes and product direction.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <section class="about reveal-section" id="about">
+      <button
+        class="about-trigger chaos-piece"
+        aria-expanded="false"
+        aria-controls="about-content"
+        ><span class="type-label" data-section-index>ABOUT</span><strong
+          >OBSERVE · MAKE · UNDERSTAND · BUILD</strong
+        ><em class="type-label">EXPAND +</em></button
+      >
+      <div class="about-content" id="about-content" hidden>
+        <canvas class="about-constellation" aria-hidden="true"></canvas>
+        <div class="about-intro">
+          <div class="about-intro__title">
+            <p class="eyebrow type-label chaos-piece">IN BETWEEN</p>
+            <h2 class="chaos-piece">
+              THE PATH IS<br />A <span class="constellation-word"
+                >CONSTELLATION</span
+              >.
+            </h2>
+            <p class="copy-width chaos-piece">
+              Not a linear career ladder—more a set of interests, tools and
+              places that gradually began to connect.
+            </p>
+          </div>
+          <div class="about-intro__aside">
+            <figure class="about-portrait">
+              <img
+                class="about-portrait__base"
+                src="assets/potrait.webp"
+                alt="Portrait of Mohan Kumar"
+              />
+              <img
+                class="about-portrait__colour"
+                src="assets/potrait.webp"
+                alt=""
+                aria-hidden="true"
+              />
+            </figure>
+          </div>
+        </div>
+        <div class="territories">
+          <article>
+            <span class="type-label">OBSERVE</span>
+            <p class="chaos-piece">Culture · behaviour · context</p>
+          </article>
+          <article>
+            <span class="type-label">MAKE</span>
+            <p class="chaos-piece">Images · motion · form</p>
+          </article>
+          <article>
+            <span class="type-label">UNDERSTAND</span>
+            <p class="chaos-piece">Patterns · incentives · systems</p>
+          </article>
+          <article>
+            <span class="type-label">BUILD</span>
+            <p class="chaos-piece">Experiences · tools · products</p>
+          </article>
+        </div>
+        <div class="about-words">
+          <p class="chaos-piece">
+            I have usually moved through mediums before disciplines. Drawing
+            became images; images became motion; motion became interaction; and
+            interaction became software. Each shift changed the questions I
+            wanted to ask, but not the urge to make ideas tangible.
+          </p>
+          <p class="chaos-piece">
+            I’m drawn to the point where an unclear human need becomes a
+            workable system, then something people can genuinely use. That means
+            noticing patterns, incentives and constraints—not simply making a
+            screen look finished.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="client-work reveal-section" id="client-work">
+      <p class="eyebrow type-label chaos-piece" data-section-index>CLIENT WORK</p>
+      <div class="section-heading">
+        <h2 class="chaos-piece title">REAL PROBLEMS.<br />REAL CONTEXT.</h2>
+        <p class="note copy-width chaos-piece">A growing record of thoughtful collaborations, practical systems and work shaped around real constraints.</p>
+      </div>
+      <div class="empty-state">
+        CLIENT WORK / IN PROGRESS<br /><span
+          >New case studies are being edited into clear stories—brief, approach,
+          outcome and what changed.</span>
+      </div>
+    </section>
+    <section class="artifacts reveal-section" id="artifacts">
+      <p class="eyebrow type-label chaos-piece" data-section-index>ARTIFACTS</p>
+      <div class="section-heading">
+        <h2 class="chaos-piece">THINGS<br />MADE.</h2>
+        <p class="note chaos-piece">
+          An evolving collection of design, web, product and process work—made
+          things, working things and ideas that have found a form.
+        </p>
+      </div>
+      <div class="empty-state">
+        ARTIFACTS / TAKING SHAPE<br /><span
+          >Visual studies, web systems and product directions will be added here
+          as they become ready to share.</span>
+      </div>
+    </section>
+    <section class="lab reveal-section" id="lab">
+      <svg
+        class="lab-sketches lab-sketches--orb"
+        viewBox="0 0 240 220"
+        aria-hidden="true"
+      >
+        <circle class="lab-sketches__orbit" cx="110" cy="104" r="70"
+        ></circle>
+        <path
+          class="lab-sketches__dash"
+          d="M35 115c32-95 144-99 170-8s-54 139-128 100"></path>
+        <circle class="lab-sketches__light" cx="58" cy="54" r="10"
+        ></circle>
+        <circle class="lab-sketches__light" cx="183" cy="153" r="7"
+        ></circle>
+      </svg>
+      <svg
+        class="lab-sketches lab-sketches--graph"
+        viewBox="0 0 640 430"
+        aria-hidden="true"
+      >
+        <path
+          class="lab-sketches__grid"
+          d="M44 52H596M44 134H596M44 216H596M44 298H596M122 22V370M242 22V370M362 22V370M482 22V370"
+        ></path>
+        <path class="lab-sketches__axis" d="M44 370V50M44 370H596"></path>
+        <path
+          class="lab-sketches__graph"
+          d="M66 314C118 278 138 324 188 250S270 268 319 196s68 38 115-42 91 31 142-88"
+        ></path>
+        <path
+          class="lab-sketches__orbit"
+          d="M414 122c45-53 131-31 139 35s-72 103-126 56-31-119 28-129"></path>
+        <path
+          class="lab-sketches__object"
+          d="M120 98c37-35 92-23 108 16s-20 80-61 73-61-53-47-89Z"></path>
+        <circle class="lab-sketches__node" cx="188" cy="250" r="8"
+        ></circle>
+        <circle class="lab-sketches__node" cx="319" cy="196" r="8"
+        ></circle>
+        <circle class="lab-sketches__node" cx="434" cy="154" r="8"
+        ></circle>
+        <path
+          class="lab-sketches__dash"
+          d="M78 394c89-33 176 22 258-6s144-14 231-40"></path>
+      </svg>
+      <svg
+        class="lab-sketches lab-sketches--script"
+        viewBox="0 0 260 150"
+        aria-hidden="true"
+      >
+        <path
+          class="lab-sketches__script"
+          d="M18 44c16-22 28 16 43-3s24-9 29 9 15 7 28-11 33 6 43-4 24 1 31 13 21-3 36-8"
+        ></path>
+        <path
+          class="lab-sketches__script"
+          d="M30 78c14 8 23-13 37-2s30 0 41 10 24-9 39-1 26 8 41-9 28 10 48 0"
+        ></path>
+        <path
+          class="lab-sketches__script"
+          d="M18 114c22-15 39 13 59-1s30-8 49 4 31-2 47-12 34 6 69-8"></path>
+      </svg>
+      <svg
+        class="lab-sketches lab-sketches--object"
+        viewBox="0 0 260 220"
+        aria-hidden="true"
+      >
+        <path
+          class="lab-sketches__grid"
+          d="M20 36H242M20 92H242M20 148H242M58 12V190M122 12V190M186 12V190"
+        ></path>
+        <path
+          class="lab-sketches__object"
+          d="M78 82 132 48l54 34v64l-54 34-54-34Z"></path>
+        <path class="lab-sketches__axis" d="m78 82 54 35 54-35M132 117v63"
+        ></path>
+        <circle class="lab-sketches__light" cx="132" cy="117" r="9"
+        ></circle>
+      </svg>
+      <p class="eyebrow type-label chaos-piece" data-section-index>LAB</p>
+      <div class="section-heading">
+        <h2 class="chaos-piece title">THINGS I’M<br />FIGURING OUT.</h2>
+        <p class="note copy-width chaos-piece">An evolving collection of research, visual studies and small working prototypes.</p>
+      </div>
+      <ol>
+        <li class="chaos-piece">
+          <span class="type-label">01</span>Robotics, autonomy and future interfaces <b
+            class="type-label">RESEARCHING</b>
+        </li>
+        <li class="chaos-piece">
+          <span class="type-label">02</span>AI inside useful everyday workflows <b class="type-label">RESEARCHING</b>
+        </li>
+        <li class="chaos-piece">
+          <span class="type-label">03</span>Interactive 3D, motion and digital material <b
+            class="type-label">RESEARCHING</b>
+        </li>
+      </ol>
+    </section>
+  </main>
+  <SiteFooter />
+</BaseLayout>
