@@ -1,23 +1,17 @@
+import {
+  applyTheme,
+  readStoredTheme,
+  writeStoredTheme,
+} from '@/scripts/theme.js';
+
 const SELECTOR = Object.freeze({
-  aboutTrigger: '.about-trigger', aboutContent: '.about-content', portrait: '.about-portrait',
   menuButton: '.floating-menu', menuSurface: '.floating-menu__surface', menuBlob: '#menu-blob-path',
   menuOverlay: '.menu-overlay', menuClose: '.menu-overlay__close', menuLink: '[data-menu-link]',
+  menuPanel: '[data-menu-panel]', panelTarget: '[data-menu-panel-target]', panelBack: '[data-menu-panel-back]',
   themeToggle: '[data-theme-toggle]', regions: 'main, footer',
 });
-const trigger = document.querySelector(SELECTOR.aboutTrigger);
-const content = document.querySelector(SELECTOR.aboutContent);
-const portrait = document.querySelector(SELECTOR.portrait);
-const menuButton = document.querySelector(SELECTOR.menuButton);
-const menuSurface = document.querySelector(SELECTOR.menuSurface);
-const menuBlobPath = document.querySelector(SELECTOR.menuBlob);
-const menuOverlay = document.querySelector(SELECTOR.menuOverlay);
-const menuClose = document.querySelector(SELECTOR.menuClose);
-const menuLinks = document.querySelectorAll(SELECTOR.menuLink);
-const themeSwitches = document.querySelectorAll(SELECTOR.themeToggle);
-const pageRegions = document.querySelectorAll(SELECTOR.regions);
 const root = document.documentElement;
 const systemDark = window.matchMedia('(prefers-color-scheme: dark)');
-const themeStorageKey = 'mohanverse-theme';
 const listen = (target, event, handler, options) => target?.addEventListener(event, handler, options);
 
 const cssMilliseconds = (token, fallback) => {
@@ -28,8 +22,8 @@ const cssMilliseconds = (token, fallback) => {
 };
 
 const motionDuration = {
-  ui: cssMilliseconds('--duration-ui', 240),
-  layout: cssMilliseconds('--duration-layout', 360),
+  base: cssMilliseconds('--motion-base', 240),
+  slow: cssMilliseconds('--motion-slow', 360),
 };
 
 const storedTheme = root.dataset.theme === 'light' || root.dataset.theme === 'dark'
@@ -41,20 +35,28 @@ const activeTheme = () => themeOverride || (systemDark.matches ? 'dark' : 'light
 
 const syncThemeControls = () => {
   const isDark = activeTheme() === 'dark';
-  themeSwitches.forEach((themeSwitch) => {
+  document.querySelectorAll(SELECTOR.themeToggle).forEach((themeSwitch) => {
     themeSwitch.setAttribute('aria-pressed', String(isDark));
     themeSwitch.setAttribute('aria-label', `Switch to ${isDark ? 'light' : 'dark'} mode`);
   });
 };
 
+const applyStoredTheme = (targetDocument = document) => {
+  const stored = readStoredTheme();
+  const theme = stored || themeOverride;
+  return applyTheme(targetDocument, theme);
+};
+
+const syncPersistedTheme = () => {
+  const theme = applyStoredTheme();
+  themeOverride = theme;
+  syncThemeControls();
+};
+
 const setTheme = (theme) => {
   themeOverride = theme;
-  root.dataset.theme = theme;
-  try {
-    localStorage.setItem(themeStorageKey, theme);
-  } catch {
-    // The current session still honours the selected theme if storage is unavailable.
-  }
+  applyTheme(document, theme);
+  writeStoredTheme(theme);
   syncThemeControls();
 };
 
@@ -62,27 +64,25 @@ syncThemeControls();
 listen(systemDark, 'change', () => {
   if (!themeOverride) syncThemeControls();
 });
-
-listen(trigger, 'click', () => {
-  const expanded = trigger.getAttribute('aria-expanded') === 'true';
-  trigger.setAttribute('aria-expanded', String(!expanded));
-  trigger.querySelector('em')?.replaceChildren(document.createTextNode(expanded ? 'EXPAND +' : 'CLOSE −'));
-  content.hidden = expanded;
-  trigger.closest('.about').classList.toggle('is-expanded', !expanded);
-  if (!expanded) content.scrollIntoView({ behavior: 'smooth', block: 'start' });
+listen(document, 'astro:before-swap', (event) => {
+  applyStoredTheme(event.newDocument);
 });
+listen(document, 'astro:after-swap', syncPersistedTheme);
+listen(document, 'astro:page-load', syncPersistedTheme);
 
-if (portrait) {
-  const movePortraitSpotlight = (event) => {
-    if (event.pointerType === 'touch') return;
-    const bounds = portrait.getBoundingClientRect();
-    portrait.style.setProperty('--spotlight-x', `${((event.clientX - bounds.left) / bounds.width * 100).toFixed(2)}%`);
-    portrait.style.setProperty('--spotlight-y', `${((event.clientY - bounds.top) / bounds.height * 100).toFixed(2)}%`);
-  };
+const initMenu = () => {
+  const menuButton = document.querySelector(SELECTOR.menuButton);
+  const menuSurface = document.querySelector(SELECTOR.menuSurface);
+  const menuBlobPath = document.querySelector(SELECTOR.menuBlob);
+  const menuOverlay = document.querySelector(SELECTOR.menuOverlay);
+  const menuClose = document.querySelector(SELECTOR.menuClose);
+  const menuLinks = document.querySelectorAll(SELECTOR.menuLink);
+  const menuPanels = [...document.querySelectorAll(SELECTOR.menuPanel)];
+  const panelTargets = document.querySelectorAll(SELECTOR.panelTarget);
+  const panelBacks = document.querySelectorAll(SELECTOR.panelBack);
 
-  listen(portrait, 'pointerenter', movePortraitSpotlight);
-  listen(portrait, 'pointermove', movePortraitSpotlight);
-}
+  if (!(menuButton && menuSurface && menuBlobPath && menuOverlay && menuClose)) return;
+  if (menuButton.dataset.menuReady === 'true') return;
 
 let dragStart = null;
 let suppressMenuClick = false;
@@ -252,12 +252,66 @@ const whompMenu = () => {
   menuButton.classList.remove('is-whomp');
   menuSurface.getBoundingClientRect();
   menuButton.classList.add('is-whomp');
-  window.setTimeout(() => menuButton.classList.remove('is-whomp'), motionDuration.ui);
+  window.setTimeout(() => menuButton.classList.remove('is-whomp'), motionDuration.base);
 };
+
+const panelMap = new Map(menuPanels.map((panel) => [panel.dataset.menuPanel, panel]));
+let panelStack = ['root'];
+
+const syncPanelState = () => {
+  const activeId = panelStack.at(-1);
+  const activeIndex = panelStack.length - 1;
+
+  menuPanels.forEach((panel) => {
+    const panelIndex = panelStack.indexOf(panel.dataset.menuPanel);
+    const state = panel.dataset.menuPanel === activeId
+      ? 'is-active'
+      : panelIndex >= 0 && panelIndex < activeIndex
+        ? 'is-before'
+        : 'is-after';
+    const isActive = state === 'is-active';
+    panel.classList.remove('is-before', 'is-active', 'is-after');
+    panel.classList.add(state);
+    panel.inert = !isActive;
+    panel.setAttribute('aria-hidden', String(!isActive));
+  });
+
+  panelTargets.forEach((target) => {
+    target.setAttribute('aria-expanded', String(target.dataset.menuPanelTarget === activeId));
+  });
+};
+
+const resetPanelNavigation = () => {
+  panelStack = ['root'];
+  syncPanelState();
+};
+
+const setActivePanel = (panelId, direction = 'forward', focus = true) => {
+  if (!panelMap.has(panelId) || panelStack.at(-1) === panelId) return;
+
+  const previousPanelId = panelStack.at(-1);
+  const existingIndex = panelStack.indexOf(panelId);
+  if (direction === 'back') {
+    if (existingIndex < 0) return;
+    panelStack = panelStack.slice(0, existingIndex + 1);
+  } else if (existingIndex >= 0) {
+    panelStack = panelStack.slice(0, existingIndex + 1);
+  } else panelStack = [...panelStack, panelId];
+  syncPanelState();
+  if (!focus) return;
+
+  const focusTarget = direction === 'back'
+    ? [...panelTargets].find((target) => target.dataset.menuPanelTarget === previousPanelId)
+    : panelMap.get(panelId)?.querySelector(SELECTOR.panelBack);
+  focusTarget?.focus({ preventScroll: true });
+};
+
+resetPanelNavigation();
 
 const applyMenuOpenState = (isOpen) => {
   if (isOpen) {
     stopMenuBlob();
+    resetPanelNavigation();
     focusBeforeMenu = document.activeElement instanceof HTMLElement && document.activeElement !== document.body
       ? document.activeElement
       : menuButton;
@@ -266,7 +320,7 @@ const applyMenuOpenState = (isOpen) => {
   menuOverlay.hidden = !isOpen;
   menuButton.setAttribute('aria-expanded', String(isOpen));
   menuButton.inert = isOpen;
-  pageRegions.forEach((region) => { region.inert = isOpen; });
+  document.querySelectorAll(SELECTOR.regions).forEach((region) => { region.inert = isOpen; });
   document.body.classList.toggle('menu-open', isOpen);
 
   if (isOpen) {
@@ -282,7 +336,8 @@ const applyMenuOpenState = (isOpen) => {
 const trapMenuFocus = (event) => {
   if (event.key !== 'Tab' || menuOverlay.hidden) return;
 
-  const focusable = [...menuOverlay.querySelectorAll('a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])')];
+  const focusable = [...menuOverlay.querySelectorAll('a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])')]
+    .filter((element) => !element.closest('[inert]'));
   if (!focusable.length) {
     event.preventDefault();
     return;
@@ -343,7 +398,7 @@ const snapMenuToCorner = () => {
     setMenuPosition(corner);
     whompMenu();
     snapTimer = null;
-  }, motionDuration.layout);
+  }, motionDuration.slow);
 };
 
 listen(menuButton, 'pointerenter', (event) => {
@@ -430,10 +485,17 @@ listen(menuButton, 'click', (event) => {
 });
 
 listen(menuClose, 'click', () => setMenuOpen(false));
-themeSwitches.forEach((themeSwitch) => {
-  listen(themeSwitch, 'click', () => {
+panelTargets.forEach((target) => {
+  listen(target, 'click', () => setActivePanel(target.dataset.menuPanelTarget));
+});
+panelBacks.forEach((back) => {
+  listen(back, 'click', () => setActivePanel(back.dataset.menuPanelBack, 'back'));
+});
+listen(document, 'click', (event) => {
+  if (!(event.target instanceof Element)) return;
+  if (event.target.closest(SELECTOR.themeToggle)) {
     setTheme(activeTheme() === 'dark' ? 'light' : 'dark');
-  });
+  }
 });
 menuLinks.forEach((link) => listen(link, 'click', () => setMenuOpen(false)));
 listen(menuOverlay, 'click', (event) => {
@@ -445,136 +507,15 @@ listen(document, 'keydown', (event) => {
 });
 
 listen(window, 'resize', () => {
-  if (!dragStart) setMenuPosition();
-});
-
-const scatterItems = document.querySelectorAll('.chaos-piece');
-const randomBetween = (min, max) => Math.random() * (max - min) + min;
-
-document.querySelectorAll('.constellation-word').forEach((word) => {
-  const label = word.textContent.trim();
-  word.setAttribute('aria-label', label);
-  word.textContent = '';
-  [...label].forEach((character, index) => {
-    const letter = document.createElement('span');
-    letter.setAttribute('aria-hidden', 'true');
-    letter.style.setProperty('--letter-index', index);
-    letter.textContent = character;
-    word.append(letter);
-  });
-});
-
-const observeMotion = (target, className, { delay = 0, threshold = 0.35, rootMargin = '0px' } = {}) => {
-  if (!target || reduceBlobMotion.matches || typeof IntersectionObserver === 'undefined') return;
-
-  let timer = null;
-  const observer = new IntersectionObserver(([entry]) => {
-    const inFocus = entry.isIntersecting && entry.intersectionRatio >= threshold;
-    if (inFocus) {
-      if (!timer && !target.classList.contains(className)) {
-        timer = window.setTimeout(() => {
-          target.classList.add(className);
-          timer = null;
-        }, delay);
-      }
-      return;
-    }
-
-    window.clearTimeout(timer);
-    timer = null;
-    target.classList.remove(className);
-  }, { threshold: threshold ? [0, threshold] : [0], rootMargin });
-
-  observer.observe(target);
-};
-
-observeMotion(document.querySelector('.practice'), 'is-practice-active', {
-  delay: 3000,
-  threshold: 0,
-  rootMargin: '-28% 0px -28% 0px',
-});
-observeMotion(document.querySelector('.lab'), 'is-lab-active', { threshold: 0.28 });
-
-const constellation = document.querySelector('.about-constellation');
-if (constellation) {
-  const context = constellation.getContext('2d');
-  const palette = ['--color-teal', '--color-lime', '--color-coral']
-    .map((token) => getComputedStyle(root).getPropertyValue(token).trim());
-  let stars = [];
-  let constellationFrame = null;
-
-  const makeStars = (width, height) => [
-    [0.16, 0.18, 0.25, 0.16, 5],
-    [0.83, 0.16, 0.22, 0.16, 4],
-    [0.16, 0.82, 0.26, 0.16, 4],
-    [0.82, 0.8, 0.28, 0.19, 5],
-  ].map(([x, y, spreadX, spreadY, count]) => Array.from({ length: count }, () => ({
-    x: randomBetween(x - spreadX / 2, x + spreadX / 2) * width,
-    y: randomBetween(y - spreadY / 2, y + spreadY / 2) * height,
-    radius: randomBetween(2.2, 4.6),
-    colour: palette[Math.floor(randomBetween(0, palette.length))],
-    phase: randomBetween(0, Math.PI * 2),
-    speed: randomBetween(0.0015, 0.0034),
-  })).sort((a, b) => a.x - b.x));
-
-  const resizeConstellation = () => {
-    const { width, height } = constellation.getBoundingClientRect();
-    const ratio = Math.min(window.devicePixelRatio ?? 1, 2);
-    if (!width || !height) return;
-    constellation.width = Math.round(width * ratio);
-    constellation.height = Math.round(height * ratio);
-    context.setTransform(ratio, 0, 0, ratio, 0, 0);
-    stars = makeStars(width, height);
-    if (!constellationFrame) constellationFrame = requestAnimationFrame(drawConstellation);
-  };
-
-  const drawConstellation = (time = 0) => {
-    const { width, height } = constellation.getBoundingClientRect();
-    if (!width || !height || !stars.length) {
-      constellationFrame = null;
-      return;
-    }
-    context.clearRect(0, 0, width, height);
-    context.strokeStyle = palette[0];
-    stars.forEach((cluster) => {
-      context.beginPath();
-      cluster.forEach(({ x, y }, index) => (index ? context.lineTo(x, y) : context.moveTo(x, y)));
-      context.setLineDash([1, 7]);
-      context.lineWidth = 3.2;
-      context.globalAlpha = 0.16;
-      context.stroke();
-      context.beginPath();
-      cluster.forEach(({ x, y }, index) => (index ? context.lineTo(x, y) : context.moveTo(x, y)));
-      context.setLineDash([2, 5]);
-      context.lineWidth = 1.15;
-      context.globalAlpha = 0.58;
-      context.stroke();
-    });
-    context.setLineDash([]);
-
-    stars.flat().forEach((star) => {
-      const pulse = reduceBlobMotion.matches ? 0.65 : 0.38 + (Math.sin(time * star.speed + star.phase) + 1) * 0.3;
-      context.globalAlpha = pulse;
-      context.fillStyle = star.colour;
-      context.beginPath();
-      context.arc(star.x, star.y, star.radius * (0.75 + pulse * 0.55), 0, Math.PI * 2);
-      context.fill();
-    });
-    context.globalAlpha = 1;
-    constellationFrame = reduceBlobMotion.matches ? null : requestAnimationFrame(drawConstellation);
-  };
-
-  new ResizeObserver(resizeConstellation).observe(constellation);
-  resizeConstellation();
-}
-
-scatterItems.forEach((item) => {
-  ['enter', 'exit'].forEach((edge) => {
-    item.style.setProperty(`--chaos-${edge}-x`, `${randomBetween(-2.25, 2.25).toFixed(2)}rem`);
-    item.style.setProperty(`--chaos-${edge}-y`, `${randomBetween(-1.5, 1.5).toFixed(2)}rem`);
-    item.style.setProperty(`--chaos-${edge}-r`, `${randomBetween(-4, 4).toFixed(2)}deg`);
-  });
+  if (!dragStart) {
+    setMenuPosition();
+  }
 });
 
 setMenuPosition();
+menuButton.dataset.menuReady = 'true';
 menuButton.classList.add('is-ready');
+};
+
+document.addEventListener('astro:page-load', initMenu);
+initMenu();

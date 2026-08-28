@@ -2,14 +2,16 @@
 interface Props {
   title?: string;
   description?: string;
+  heroImage?: string;
 }
 
 const {
   title = 'Mohan Kumar — Design, Software, Products',
   description = 'Mohan Kumar — design, software and products.',
+  heroImage,
 } = Astro.props;
 
-import '../styles/site.css';
+import '@/styles/site.css';
 import { ClientRouter } from 'astro:transitions';
 ---
 <!doctype html>
@@ -30,13 +32,7 @@ import { ClientRouter } from 'astro:transitions';
         // Private browsing or blocked storage falls back to system preference.
       }
     </script>
-    <link
-      rel="preload"
-      as="image"
-      href="/assets/hero-art.webp"
-      type="image/webp"
-      fetchpriority="high"
-    />
+    {heroImage && <link rel="preload" as="image" href={heroImage} type="image/webp" fetchpriority="high" />}
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -59,7 +55,8 @@ import { ClientRouter } from 'astro:transitions';
     <ClientRouter />
   </head>
   <body>
+    <a class="skip-link" href="#main-content">Skip to content</a>
     <slot />
-    <script src="../scripts/site.js"></script>
+    <script src="@/scripts/site.js"></script>
   </body>
 </html>

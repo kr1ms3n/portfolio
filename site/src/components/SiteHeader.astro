@@ -1,14 +1,57 @@
 <header transition:persist="site-header">
   <button class="floating-menu" type="button" aria-label="Open site menu" aria-controls="site-menu" aria-expanded="false"><span class="floating-menu__surface"><svg class="floating-menu__blob" viewBox="0 0 100 100" aria-hidden="true"><path id="menu-blob-path" d="M39 8.95 Q50 6 61 8.95 Q72 11.89 80.05 19.95 Q88.11 28 91.05 39 Q94 50 91.05 61 Q88.11 72 80.05 80.05 Q72 88.11 61 91.05 Q50 94 39 91.05 Q28 88.11 19.95 80.05 Q11.89 72 8.95 61 Q6 50 8.95 39 Q11.89 28 19.95 19.95 Q28 11.89 39 8.95 Z"></path></svg><span class="floating-menu__content"><span class="floating-menu__icon" aria-hidden="true"><i></i><i></i><i></i></span><span class="floating-menu__label">MENU</span></span></span></button>
-  <aside class="menu-overlay" id="site-menu" role="dialog" aria-modal="true" aria-labelledby="site-menu-title" hidden><div class="menu-overlay__content"><p class="eyebrow type-label" id="site-menu-title">NAVIGATION / 2026</p><nav class="menu-overlay__links"><a href="#top" data-menu-link>HOME <span aria-hidden="true"></span></a><a href="#what-i-do" data-menu-link>PRACTICE <span aria-hidden="true"></span></a><a href="#about" data-menu-link>ABOUT <span aria-hidden="true"></span></a><a href="#client-work" data-menu-link>CLIENT WORK <span aria-hidden="true"></span></a><a href="#artifacts" data-menu-link>ARTIFACTS <span aria-hidden="true"></span></a><a href="#lab" data-menu-link>LAB <span aria-hidden="true"></span></a><a href="#contact" data-menu-link>CONTACT <span aria-hidden="true"></span></a></nav><button class="theme-switch" data-theme-toggle type="button" aria-label="Switch to dark mode" aria-pressed="false"><span class="theme-switch__light">LIGHT</span><span class="theme-switch__track" aria-hidden="true"></span><span class="theme-switch__dark">DARK</span></button><button class="menu-overlay__close" type="button" aria-label="Close site menu"><span aria-hidden="true">×</span> CLOSE MENU</button></div></aside>
+  <aside class="menu-overlay" id="site-menu" role="dialog" aria-modal="true" aria-labelledby="site-menu-title" hidden>
+    <div class="menu-overlay__content">
+      <p class="eyebrow type-label" id="site-menu-title">NAVIGATION / {new Date().getFullYear()}</p>
+      <div class="menu-overlay__panel-viewport">
+        <div class="menu-overlay__panel-track" data-menu-track>
+          <div class="menu-overlay__panel menu-overlay__panel--primary is-active" data-menu-panel="root" data-menu-primary aria-hidden="false">
+            <nav class="menu-overlay__links" aria-label="Homepage sections">
+              <a href="/" data-menu-link>HOME <span class="menu-overlay__item-marker" aria-hidden="true"></span></a>
+              <a href="/#what-i-do" data-menu-link>PRACTICE <span class="menu-overlay__item-marker" aria-hidden="true"></span></a>
+              <a href="/#about" data-menu-link>ABOUT <span class="menu-overlay__item-marker" aria-hidden="true"></span></a>
+              <a href="/#client-work" data-menu-link>CLIENT WORK <span class="menu-overlay__item-marker" aria-hidden="true"></span></a>
+              <button class="menu-overlay__branch-trigger" type="button" data-menu-panel-target="artifacts-pages" aria-expanded="false" aria-controls="artifacts-pages">
+                <span>ARTIFACTS</span>
+                <span class="menu-overlay__item-marker menu-overlay__branch-marker" aria-hidden="true"></span>
+              </button>
+              <a href="/#lab" data-menu-link>LAB <span class="menu-overlay__item-marker" aria-hidden="true"></span></a>
+              <a href="/#contact" data-menu-link>CONTACT <span class="menu-overlay__item-marker" aria-hidden="true"></span></a>
+            </nav>
+          </div>
+          <div class="menu-overlay__panel menu-overlay__panel--branch is-after" id="artifacts-pages" data-menu-panel="artifacts-pages" data-menu-parent="root" aria-hidden="true" inert>
+            <div class="menu-overlay__subhead">
+              <button class="menu-overlay__branch-back" type="button" data-menu-panel-back="root">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H6M11 6l-6 6 6 6" /></svg>
+                <span>ARTIFACTS</span>
+              </button>
+              <p class="type-label">PAGES / BUILDS</p>
+            </div>
+            <nav class="menu-overlay__subpages" aria-label="Artifact pages">
+              <a class="menu-overlay__page-link menu-overlay__page-link--parent" href="/#artifacts" data-menu-link>
+                <span class="menu-overlay__page-copy"><small class="type-label">05 / MAIN SECTION</small><strong>ARTIFACTS</strong></span>
+                <span class="menu-overlay__page-arrow" aria-hidden="true">↗</span>
+              </a>
+              <a class="menu-overlay__page-link menu-overlay__page-link--child" href="/builds/" data-menu-link>
+                <span class="menu-overlay__page-copy"><small class="type-label">05.01 / PAGE</small><strong>BUILDS</strong></span>
+                <span class="menu-overlay__page-arrow" aria-hidden="true">↗</span>
+              </a>
+            </nav>
+          </div>
+        </div>
+      </div>
+      <button class="theme-switch" data-theme-toggle type="button" aria-label="Switch to dark mode" aria-pressed="false"><span class="theme-switch__light">LIGHT</span><span class="theme-switch__track" aria-hidden="true"></span><span class="theme-switch__dark">DARK</span></button>
+      <button class="menu-overlay__close" type="button" aria-label="Close site menu"><span aria-hidden="true">×</span> CLOSE MENU</button>
+    </div>
+  </aside>
 
 <style is="global">
 .floating-menu {
-  --menu-size: clamp(5.5rem, 9vw, 7.5rem);
+  --menu-size: clamp(5.5rem, calc(5.5rem + (7.5rem - 5.5rem) * var(--fluid-progress)), 7.5rem);
   position: fixed;
   top: 0;
   left: 0;
-  z-index: var(--z-menu);
+  z-index: var(--z-floating);
   display: block;
   width: var(--menu-size);
   height: var(--menu-size);
@@ -21,7 +64,7 @@
   view-transition-name: menu-control;
   view-transition-class: menu-control;
   opacity: 0;
-  transition: opacity var(--duration-fast) ease;
+  transition: opacity var(--motion-fast) var(--motion-ease);
 }
 
 .floating-menu.is-ready {
@@ -29,7 +72,8 @@
 }
 
 .floating-menu:focus-visible {
-  outline: 0;
+  outline: var(--border-strong) solid var(--signal);
+  outline-offset: 3px;
 }
 
 .floating-menu:focus-visible .floating-menu__blob path {
@@ -43,7 +87,7 @@
 
 .floating-menu.is-snapping {
   cursor: default;
-  transition: left var(--duration-layout) var(--ease-out), top var(--duration-layout) var(--ease-out), opacity var(--duration-fast) ease;
+  transition: left var(--motion-slow) var(--motion-ease), top var(--motion-slow) var(--motion-ease), opacity var(--motion-fast) var(--motion-ease);
 }
 
 .floating-menu__surface {
@@ -77,15 +121,15 @@
   display: grid;
   place-content: center;
   gap: .45rem;
-  padding: 1.5rem;
+  padding: var(--space-6);
 }
 
 .floating-menu.is-whomp .floating-menu__surface {
-  animation: menu-whomp var(--duration-ui) var(--ease-out);
+  animation: menu-whomp var(--motion-base) var(--motion-ease);
 }
 
 .floating-menu.is-whomp .floating-menu__blob path {
-  animation: menu-impact var(--duration-ui) ease-out;
+  animation: menu-impact var(--motion-base) var(--motion-ease);
 }
 
 .floating-menu__icon {
@@ -101,11 +145,15 @@
 }
 
 .floating-menu__label {
-  font: 500 .625rem/1 var(--font-mono);
-  letter-spacing: .08em;
+  font: 500 var(--type-micro-size)/1 var(--font-mono);
+  letter-spacing: var(--tracking-roomy);
 }
 
 .menu-overlay {
+  --menu-primary-size: var(--type-nav-size);
+  --menu-secondary-size: var(--type-subheading-size);
+  --menu-ui-size: var(--type-label-size);
+  --menu-meta-size: var(--type-meta-size);
   position: fixed;
   z-index: var(--z-overlay);
   inset: 0;
@@ -118,6 +166,7 @@
   overscroll-behavior: contain;
   background: color-mix(in oklch, var(--canvas) 20%, transparent);
   color: var(--surface-copy);
+  transition: background-color var(--motion-slow) var(--motion-ease), color var(--motion-slow) var(--motion-ease), border-color var(--motion-slow) var(--motion-ease);
 }
 
 .menu-overlay[hidden] {
@@ -128,14 +177,14 @@
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
-  width: min(75vw, 45rem);
+  inline-size: min(75vw, var(--container-md));
   height: min(90dvh, 55rem);
   max-height: 100%;
-  padding: clamp(1.25rem, 3.5vw, 2.5rem);
-  overflow-y: auto;
-  scrollbar-width: none;
-  border: 1px solid color-mix(in oklch, var(--tone-mist) 52%, transparent);
-  border-radius: 1.5rem;
+  padding: var(--layout-panel);
+  overflow: hidden;
+  overflow-x: hidden;
+  border: var(--border-thin) solid color-mix(in oklch, var(--tone-mist) 52%, transparent);
+  border-radius: var(--radius-xl);
   background: radial-gradient(circle at 18% 8%, color-mix(in oklch, var(--tone-mist) 32%, transparent), transparent 35%), radial-gradient(circle at 82% 100%, color-mix(in oklch, var(--color-teal) 22%, transparent), transparent 48%), linear-gradient(145deg, color-mix(in oklch, var(--surface) 78%, transparent), color-mix(in oklch, var(--interactive-surface) 58%, transparent));
   box-shadow: inset 0 1px 0 color-mix(in oklch, var(--tone-mist) 68%, transparent), inset 0 -1.25rem 2.5rem color-mix(in oklch, var(--copy) 14%, transparent), 0 1.75rem 5rem color-mix(in oklch, var(--copy) 34%, transparent);
   -webkit-backdrop-filter: blur(2rem) saturate(155%);
@@ -144,69 +193,290 @@
   view-transition-class: menu-control;
 }
 
-.menu-overlay__content::-webkit-scrollbar {
-  display: none;
-}
-
 .menu-overlay__links {
   display: grid;
+  flex: 1 1 auto;
   counter-reset: menu-link;
   gap: 0;
-  margin: 0 0 2rem;
-  border-block: 1px solid color-mix(in oklch, var(--tone-mist) 34%, transparent);
+  margin: 0;
 }
 
-.menu-overlay__links a {
+.menu-overlay__links > a,
+.menu-overlay__branch-trigger {
   display: flex;
   justify-content: space-between;
-  gap: 1.25rem;
-  padding: clamp(.65rem, 1.2vw, .95rem) 0;
+  align-items: center;
+  gap: var(--space-5);
+  width: 100%;
+  padding: var(--layout-inset) 0;
   border: 0;
   border-radius: 0;
-  background: 0 0;
-  font-size: clamp(2rem, 5vw, 4rem);
-  font-weight: 800;
-  letter-spacing: -.07em;
-  line-height: .9;
+  background: transparent;
+  color: var(--surface-copy);
+  font: 800 var(--menu-primary-size)/.9 var(--font-display);
+  letter-spacing: var(--tracking-tight);
+  text-align: left;
+  transition: color var(--motion-base) var(--motion-ease);
+}
+
+.menu-overlay__links > a {
   text-decoration: none;
   counter-increment: menu-link;
-  transition: color var(--duration-ui) ease, transform var(--duration-ui) ease;
 }
 
-.menu-overlay__links a+a {
-  border-top: 1px solid color-mix(in oklch, var(--tone-mist) 22%, transparent);
+.menu-overlay__links > :not(:first-child) {
+  border-top: var(--border-thin) solid color-mix(in oklch, var(--tone-mist) 22%, transparent);
 }
 
-.menu-overlay__links a:focus-visible,
-.menu-overlay__links a:hover {
-  outline: 0;
+.menu-overlay__links > a:focus-visible,
+.menu-overlay__links > a:hover,
+.menu-overlay__branch-trigger:focus-visible,
+.menu-overlay__branch-trigger:hover,
+.menu-overlay__branch-trigger[aria-expanded=true] {
   color: var(--color-teal);
-  transform: translateX(.2rem);
 }
 
-.menu-overlay__links span,
+.menu-overlay__item-marker,
 .theme-switch {
   align-self: end;
-  font: 500 .75rem/1 var(--font-mono);
-  letter-spacing: .08em;
+  font: 500 var(--menu-ui-size)/1 var(--font-mono);
+  letter-spacing: var(--tracking-roomy);
 }
 
 .theme-switch {
   display: grid;
   grid-template-columns: auto 5rem auto;
   align-items: center;
-  gap: .75rem;
+  gap: var(--space-3);
   align-self: center;
-  margin-bottom: 1.25rem;
+  margin-block: var(--space-5);
   padding: 0;
   border: 0;
   background: 0 0;
   cursor: pointer;
-  font: 500 .6875rem/1 var(--font-mono);
+  font: 500 var(--menu-meta-size)/1 var(--font-mono);
 }
 
-.menu-overlay__links span::before {
+.menu-overlay__item-marker {
+  position: relative;
+  display: grid;
+  place-items: center end;
+  width: 2.5rem;
+  min-width: 2.5rem;
+  height: 1.4em;
+  overflow: hidden;
+  transition: transform var(--motion-base) var(--motion-ease);
+}
+
+.menu-overlay__item-marker::before {
+  grid-area: 1 / 1;
   content: counter(menu-link, decimal-leading-zero);
+  transition: opacity var(--motion-base) var(--motion-ease), transform var(--motion-base) var(--motion-ease);
+}
+
+.menu-overlay__branch-marker::after {
+  grid-area: 1 / 1;
+  content: "→";
+  font-size: 1.4em;
+  opacity: 0;
+  transform: translateY(.45em);
+  transition: opacity var(--motion-base) var(--motion-ease), transform var(--motion-base) var(--motion-ease);
+}
+
+.menu-overlay__links > a:hover .menu-overlay__item-marker,
+.menu-overlay__links > a:focus-visible .menu-overlay__item-marker,
+.menu-overlay__branch-trigger:hover .menu-overlay__item-marker,
+.menu-overlay__branch-trigger:focus-visible .menu-overlay__item-marker,
+.menu-overlay__branch-trigger[aria-expanded=true] .menu-overlay__item-marker {
+  transform: translateX(-.2rem);
+}
+
+.menu-overlay__branch-trigger:hover .menu-overlay__item-marker::before,
+.menu-overlay__branch-trigger:focus-visible .menu-overlay__item-marker::before,
+.menu-overlay__branch-trigger[aria-expanded=true] .menu-overlay__item-marker::before {
+  opacity: 0;
+  transform: translateY(-.45em);
+}
+
+.menu-overlay__branch-trigger:hover .menu-overlay__branch-marker::after,
+.menu-overlay__branch-trigger:focus-visible .menu-overlay__branch-marker::after,
+.menu-overlay__branch-trigger[aria-expanded=true] .menu-overlay__branch-marker::after {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.menu-overlay__page-link {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-4);
+  padding: .9rem .25rem;
+  border: 0;
+  border-bottom: var(--border-thin) solid color-mix(in oklch, var(--tone-mist) 28%, transparent);
+  border-radius: 0;
+  background: transparent;
+  color: var(--surface-copy);
+  font: 700 var(--menu-secondary-size)/1 var(--font-display);
+  letter-spacing: var(--tracking-tight);
+  text-decoration: none;
+  transition: background-color var(--motion-base) var(--motion-ease), color var(--motion-base) var(--motion-ease);
+}
+
+.menu-overlay__page-link:hover,
+.menu-overlay__page-link:focus-visible {
+  background: color-mix(in oklch, var(--color-teal) 10%, transparent);
+  color: var(--color-teal);
+}
+
+.menu-overlay__page-copy {
+  display: grid;
+  gap: .4rem;
+  color: var(--quiet-copy);
+}
+
+.menu-overlay__page-copy small {
+  color: inherit;
+  font: 500 var(--menu-meta-size)/1 var(--font-mono);
+  letter-spacing: var(--tracking-roomy);
+}
+
+.menu-overlay__page-copy strong {
+  font: inherit;
+}
+
+.menu-overlay__page-arrow {
+  font: 500 var(--menu-ui-size)/1 var(--font-mono);
+  letter-spacing: var(--tracking-roomy);
+  transition: transform var(--motion-base) var(--motion-ease);
+}
+
+.menu-overlay__page-link:hover .menu-overlay__page-arrow,
+.menu-overlay__page-link:focus-visible .menu-overlay__page-arrow {
+  transform: translateX(-.2rem);
+}
+
+.menu-overlay__panel-viewport {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.menu-overlay__panel-track {
+  position: relative;
+  min-width: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.menu-overlay__panel {
+  display: flex;
+  position: absolute;
+  inset: 0;
+  flex-direction: column;
+  min-width: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  box-sizing: border-box;
+  backface-visibility: hidden;
+  transform: translateX(100%);
+  transition: transform var(--motion-slow) var(--motion-ease);
+  will-change: transform;
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in oklch, var(--surface-copy) 42%, transparent) transparent;
+}
+
+.menu-overlay__panel::-webkit-scrollbar { width: .35rem; }
+.menu-overlay__panel::-webkit-scrollbar-track { background: transparent; }
+.menu-overlay__panel::-webkit-scrollbar-thumb {
+  border: .1rem solid transparent;
+  border-radius: var(--radius-pill);
+  background: color-mix(in oklch, var(--surface-copy) 42%, transparent);
+  background-clip: padding-box;
+}
+
+.menu-overlay__panel.is-before { transform: translateX(-100%); }
+.menu-overlay__panel.is-active { transform: translateX(0); }
+.menu-overlay__panel.is-after { transform: translateX(100%); }
+
+.menu-overlay__branch-trigger {
+  cursor: pointer;
+  overflow: hidden;
+  appearance: none;
+  counter-increment: menu-link;
+}
+
+.menu-overlay__branch-back svg {
+  width: 1.15rem;
+  height: 1.15rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.5;
+}
+
+.menu-overlay__subhead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  min-height: 3.75rem;
+  border-bottom: var(--border-thin) solid color-mix(in oklch, var(--tone-mist) 34%, transparent);
+  color: var(--quiet-copy);
+}
+
+.menu-overlay__subhead p {
+  margin: 0;
+  color: inherit;
+}
+
+.menu-overlay__branch-back {
+  display: inline-flex;
+  align-items: center;
+  gap: .65rem;
+  padding: .5rem 0;
+  border: 0;
+  background: transparent;
+  color: var(--surface-copy);
+  cursor: pointer;
+  font: 500 var(--menu-ui-size)/1 var(--font-mono);
+  letter-spacing: var(--tracking-roomy);
+}
+
+.menu-overlay__branch-back:hover,
+.menu-overlay__branch-back:focus-visible {
+  color: var(--color-teal);
+}
+
+.menu-overlay__subpages {
+  display: grid;
+  gap: var(--space-3);
+  padding-top: var(--space-5);
+}
+
+.menu-overlay__subpages .menu-overlay__page-link {
+  width: 100%;
+}
+
+.menu-overlay__subpages .menu-overlay__page-link--child {
+  margin-left: 1.5rem;
+  width: calc(100% - 1.5rem);
+  border-left: .2rem solid var(--color-teal);
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.menu-overlay__sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 .theme-switch__track {
@@ -214,9 +484,8 @@
   width: 5rem;
   height: 1.5rem;
   padding: .2rem;
-  border: 1px solid var(--rule-strong);
-  border-radius: 50vw;
-  background: linear-gradient(90deg, var(--canvas), var(--signal), var(--copy));
+  border: var(--border-thin) solid var(--rule-strong);
+  border-radius: var(--radius-pill);
   background: linear-gradient(90deg in oklch, var(--canvas), var(--signal), var(--copy));
 }
 
@@ -224,12 +493,12 @@
   display: block;
   width: 1rem;
   height: 1rem;
-  border-radius: 50%;
+  border-radius: var(--radius-round);
   background: var(--signal);
   box-shadow: 0 0 0 1px var(--copy);
   content: "";
   transform: translateX(0);
-  transition: transform var(--duration-ui) ease;
+  transition: transform var(--motion-base) var(--motion-ease);
 }
 
 .theme-switch[aria-pressed=true] .theme-switch__track::after {
@@ -252,12 +521,19 @@
   border: 0;
   background: 0 0;
   cursor: pointer;
-  font: 500 .75rem/1 var(--font-mono);
-  letter-spacing: .08em;
+  font: 500 var(--menu-ui-size)/1 var(--font-mono);
+  letter-spacing: var(--tracking-roomy);
 }
 
 .menu-overlay__close span {
   font: 2rem/.5 var(--font-display);
+}
+
+/* Keep focus visible without an outline bleeding beyond the menu surface. */
+.menu-overlay :is(a, button):focus-visible {
+  outline: 0;
+  outline-offset: 0;
+  box-shadow: inset 0 -2px var(--signal);
 }
 
 body.menu-open {
@@ -273,6 +549,31 @@ body.menu-open .floating-menu {
 body.menu-open .menu-overlay__content {
   view-transition-name: menu-control;
 }
+
+@media (width <= 48rem) {
+  .menu-overlay__content {
+    inline-size: min(calc(100vw - 2rem), var(--container-md));
+    height: min(82dvh, 40rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .theme-switch__track::after,
+  .menu-overlay {
+    transition: none;
+  }
+
+  .floating-menu.is-snapping {
+    transition: none;
+  }
+
+  .floating-menu.is-whomp .floating-menu__blob path,
+  .floating-menu.is-whomp .floating-menu__surface,
+  .menu-overlay__content {
+    animation: none;
+  }
+}
+
 
 @keyframes menu-whomp {
   0%,

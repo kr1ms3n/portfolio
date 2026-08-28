@@ -1,12 +1,24 @@
 ---
-import BaseLayout from "../layouts/BaseLayout.astro";
-import SiteHeader from "../components/SiteHeader.astro";
-import SiteFooter from "../components/SiteFooter.astro";
+import { getCollection } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import SiteHeader from '@/components/SiteHeader.astro';
+import SiteFooter from '@/components/SiteFooter.astro';
+import BuildCard from '@/components/BuildCard.astro';
+import '@/styles/home.css';
+
+const featuredBuilds = (await getCollection('builds'))
+  .filter(({ data }) => data.featured)
+  .sort((a, b) => b.data.year - a.data.year);
+
+const cardStyle = (index: number) => [
+  `--card-rotate:${(Math.sin(index * 2.17) * 3.8).toFixed(2)}deg`,
+  `--card-lift:${(Math.cos(index * 1.41) * 0.45).toFixed(2)}rem`,
+].join(';');
 ---
 
-<BaseLayout>
+<BaseLayout heroImage="/assets/hero-art.webp">
   <SiteHeader />
-  <main transition:name="page" transition:animate="fade">
+  <main id="main-content" data-page="home" transition:name="page" transition:animate="fade">
     <section class="hero reveal-section" id="top">
       <div class="hero-top">
         <a href="#top" class="wordmark chaos-piece link-underline">MOHAN KUMAR</a>
@@ -256,11 +268,14 @@ import SiteFooter from "../components/SiteFooter.astro";
           things, working things and ideas that have found a form.
         </p>
       </div>
-      <div class="empty-state">
-        ARTIFACTS / TAKING SHAPE<br /><span
-          >Visual studies, web systems and product directions will be added here
-          as they become ready to share.</span>
+      <div class="artifacts-deck" aria-label="Featured builds">
+        {featuredBuilds.map((build, index) => (
+          <div class="artifacts-deck__card" style={cardStyle(index)}>
+            <BuildCard build={build} variant="artifact" />
+          </div>
+        ))}
       </div>
+      <a class="btn-link" href="/builds/">VIEW ALL BUILDS <span aria-hidden="true">↗</span></a>
     </section>
     <section class="lab reveal-section" id="lab">
       <svg
@@ -363,4 +378,5 @@ import SiteFooter from "../components/SiteFooter.astro";
     </section>
   </main>
   <SiteFooter />
+  <script src="@/scripts/home.js"></script>
 </BaseLayout>

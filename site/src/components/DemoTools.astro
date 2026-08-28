@@ -1,0 +1,29 @@
+---
+interface Props {
+  overviewPath: string;
+  label?: string;
+}
+
+const { overviewPath, label = 'DEMO TOOLS' } = Astro.props;
+---
+
+<nav class="demo-tools" aria-label={label}>
+  <a class="demo-tools__tool" href={overviewPath} aria-label="Back to build overview" title="Build overview">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M11 6l-6 6 6 6M19 5v14" /></svg>
+  </a>
+  <button class="demo-tools__tool" type="button" data-demo-theme aria-pressed="false" aria-label="Switch theme" title="Switch theme">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3.5" /><path d="M12 2v3M12 19v3M4.93 4.93l2.12 2.12M16.95 16.95l2.12 2.12M2 12h3M19 12h3M4.93 19.07l2.12-2.12M16.95 7.05l2.12-2.12" /></svg>
+    <span class="demo-tools__sr-only" data-demo-theme-label>System</span>
+  </button>
+  <button class="demo-tools__tool" type="button" data-demo-reset aria-label="Reset view" title="Reset view">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5v6h6M5 11a7.5 7.5 0 1 1 2.1 5.3" /></svg>
+  </button>
+</nav>
+
+<script>
+  import { applyDemoTheme, setupDemoTools } from '@/scripts/demo-tools.js';
+
+  setupDemoTools();
+  document.addEventListener('astro:before-swap', (event) => applyDemoTheme(event.newDocument));
+  document.addEventListener('astro:page-load', setupDemoTools);
+</script>

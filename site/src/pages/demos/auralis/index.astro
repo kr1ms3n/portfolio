@@ -1,0 +1,112 @@
+---
+import '@/styles/demo.css';
+import '@/demos/auralis/styles.css';
+import { ClientRouter } from 'astro:transitions';
+import DemoTools from '@/components/DemoTools.astro';
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="dark light" />
+    <meta name="description" content="Auralis — a midsummer gathering between neighbouring realms." />
+    <title>Auralis — The Meadow Gate</title>
+  </head>
+  <body class="demo-page aura-demo">
+    <a class="skip-link" href="#main-content">Skip to content</a>
+    <DemoTools overviewPath="/builds/auralis/" label="AURALIS / TOOLS" />
+    <div class="aura-shell" id="top">
+      <header class="aura-header">
+        <a class="aura-mark" href="#top" aria-label="Auralis home">
+          <span class="aura-mark__glyph" aria-hidden="true">✳</span>
+          <span>Auralis</span>
+        </a>
+        <p class="aura-header__issue">AURALIS <span aria-hidden="true">/</span> THE MEADOW GATE</p>
+        <nav aria-label="Auralis navigation">
+          <a href="#gathering">The gathering</a>
+          <button class="aura-link aura-link--button" type="button" data-open-reserve>Reserve a place <span aria-hidden="true">↗</span></button>
+        </nav>
+      </header>
+
+      <main id="main-content">
+        <section class="aura-hero" aria-labelledby="hero-title">
+          <div class="aura-hero__copy">
+            <p class="aura-label">A midsummer crossing</p>
+            <h1 id="hero-title">Come through<br /><em>the light.</em></h1>
+            <p class="aura-lede">Auralis opens its meadow gate for one long evening of shared food, tiny ceremonies, and stories carried between neighbouring worlds.</p>
+            <div class="aura-actions">
+              <a class="aura-button aura-button--solid" href="#gathering">Enter the meadow <span aria-hidden="true">↓</span></a>
+              <button class="aura-button aura-button--quiet" type="button" data-open-reserve>Reserve a place <span aria-hidden="true">↗</span></button>
+            </div>
+            
+          </div>
+
+          <figure class="meadow-card" aria-labelledby="meadow-caption" transition:name="build-cover-auralis">
+            <div class="meadow-card__glow" aria-hidden="true"></div>
+            <div class="meadow-card__sun" aria-hidden="true"></div>
+            <svg class="meadow-card__twig" viewBox="0 0 620 600" role="img" aria-label="A hand-drawn branch with leaves and a midsummer sun">
+              <path class="twig-line" d="M88 548C184 450 196 326 270 241c66-76 139-96 253-180" />
+              <path class="twig-line twig-line--fine" d="M206 386c-58-22-96-13-137 18M237 324c-12-58 0-96 39-137M314 250c64 18 103 11 142-23M390 178c4-56 29-86 76-112" />
+              <path class="leaf leaf--mango" d="M107 402c-35-36-72-32-90-14 24 42 57 49 90 14Z" />
+              <path class="leaf leaf--cream" d="M246 317c-32-39-25-76 2-96 34 32 35 64-2 96Z" />
+              <path class="leaf leaf--mango" d="M353 223c40-28 74-16 88 12-43 27-72 23-88-12Z" />
+              <path class="leaf leaf--cream" d="M444 153c-7-47 17-72 49-78 10 45-7 68-49 78Z" />
+              <circle class="twig-dot" cx="268" cy="241" r="7" />
+              <circle class="twig-dot twig-dot--small" cx="390" cy="178" r="4" />
+            </svg>
+            <div class="meadow-card__stamp" aria-hidden="true"><span>AURALIS</span><strong>GATE</strong><span>LONG LIGHT</span></div>
+            <figcaption id="meadow-caption">An invitation from the meadow gate, where the next realm begins.</figcaption>
+          </figure>
+        </section>
+
+        <section class="aura-gathering" id="gathering" aria-labelledby="gathering-title">
+          <div class="aura-gathering__intro">
+            <p class="aura-label">The gathering / one cycle</p>
+            <h2 id="gathering-title">A small place<br />for <em>many worlds.</em></h2>
+          </div>
+          <div class="aura-gathering__details">
+            <p>Bring a lantern, a story, or simply your attention. The Auralis gathering is an invitation to pause at the border and meet what is already there.</p>
+            <dl class="aura-facts">
+              <div><dt>When</dt><dd>21 June · long light</dd></div>
+              <div><dt>Where</dt><dd>The meadow gate, Auralis</dd></div>
+              <div><dt>For</dt><dd>Travellers, makers, sprite-folk</dd></div>
+            </dl>
+            <button class="aura-button aura-button--outline" type="button" data-open-reserve>Mark your place <span aria-hidden="true">↗</span></button>
+          </div>
+        </section>
+      </main>
+
+      <footer class="aura-footer">
+        <p><a href="/builds/">← Builds</a> / Auralis / The meadow gate</p>
+        <p>Auralis / The meadow gate · 21 June</p>
+      </footer>
+    </div>
+
+    <dialog class="reserve-dialog" id="reserve-dialog" aria-labelledby="reserve-title" aria-describedby="reserve-description">
+      <div class="reserve-card">
+        <button class="reserve-close" type="button" data-close-reserve aria-label="Close reservation dialog">×</button>
+        <form data-reserve-form novalidate>
+          <p class="aura-label">Auralis / Reservation</p>
+          <h2 id="reserve-title">Leave a little light.</h2>
+          <p id="reserve-description">Share an email and we will save your invitation for the long light.</p>
+          <label for="reserve-email">Email address</label>
+          <input id="reserve-email" name="email" type="email" autocomplete="email" required placeholder="you@example.com" />
+          
+          <div class="reserve-actions"><button class="aura-button aura-button--solid" type="submit">Reserve my place <span aria-hidden="true">↗</span></button><button class="aura-button aura-button--quiet" type="button" data-close-reserve>Not now</button></div>
+        </form>
+        <section class="reserve-success" data-reserve-success hidden aria-live="polite" aria-labelledby="reserve-success-title">
+          <p class="aura-label">Place marked</p>
+          <h2 id="reserve-success-title" tabindex="-1">See you at the meadow gate.</h2>
+          <p>Your place is marked for the long light. We will see you at the meadow gate.</p>
+          <button class="aura-button aura-button--solid" type="button" data-close-reserve>Back to Auralis</button>
+        </section>
+      </div>
+    </dialog>
+
+    <ClientRouter />
+    <script src="@/demos/auralis/script.js"></script>
+  </body>
+</html>
+
+

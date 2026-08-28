@@ -1,0 +1,94 @@
+---
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import SiteHeader from '@/components/SiteHeader.astro';
+import SiteFooter from '@/components/SiteFooter.astro';
+import BuildCard from '@/components/BuildCard.astro';
+import '@/styles/builds.css';
+
+export async function getStaticPaths() {
+  const builds = await getCollection('builds');
+  return builds.map((build) => ({
+    params: { slug: build.data.slug },
+    props: { build },
+  }));
+}
+
+interface Props {
+  build: CollectionEntry<'builds'>;
+}
+
+const { build } = Astro.props;
+const { data } = build;
+const { Content } = await render(build);
+const landscapeSrcset = data.coverLandscapeSmall
+  ? `${data.coverLandscapeSmall} 720w, ${data.cover} 1440w`
+  : undefined;
+const portraitSrcset = data.coverPortrait && data.coverPortraitSmall
+  ? `${data.coverPortraitSmall} 480w, ${data.coverPortrait} 720w`
+  : data.coverPortrait;
+const related = (await getCollection('builds'))
+  .filter((item) => item.data.slug !== data.slug)
+  .slice(0, 2);
+---
+
+<BaseLayout
+  title={data.title + ' — Builds — Mohanverse'}
+  description={data.summary}
+>
+  <SiteHeader />
+  <main id="main-content" class="build-detail" transition:name="page" transition:animate="fade">
+    <a class="build-detail__back type-label link-underline" href="/builds/">← ALL BUILDS</a>
+    <header class="build-detail__hero">
+      <div class="build-detail__intro">
+        <p class="eyebrow type-label">{data.category} · {data.status} · {data.year}</p>
+        <h1 class="title">{data.title}</h1>
+        <p class="lead copy-width">{data.summary}</p>
+        <ul class="build-detail__tags" aria-label="Capabilities and tags">
+          {data.capabilities.map((capability) => <li>{capability}</li>)}
+          {data.tags.map((tag) => <li>#{tag}</li>)}
+        </ul>
+      </div>
+    </header>
+
+    <a class="build-detail__capture-link" href={data.demoPath} aria-label={'Open ' + data.title + ' demo'}>
+      <figure class="build-detail__capture" transition:name={'build-cover-' + data.slug}>
+        <picture>
+          {data.coverPortrait && (
+            <source media="(max-width: 48rem)" srcset={portraitSrcset} sizes="100vw" />
+          )}
+          <img
+            src={data.cover}
+            srcset={landscapeSrcset}
+            sizes="100vw"
+            alt={data.title + ' demo capture'}
+            width="1440"
+            height="900"
+            fetchpriority="high"
+          />
+        </picture>
+      </figure>
+    </a>
+
+    <section class="build-detail__content" aria-labelledby="build-introduction">
+        <div class="build-detail__content-label">
+          <h2 class="eyebrow type-label" id="build-introduction">ABOUT THIS BUILD</h2>
+        <a class="btn-link" href={data.demoPath}>OPEN BUILD <span aria-hidden="true">↗</span></a>
+      </div>
+      <div class="build-detail__prose">
+        <Content />
+      </div>
+    </section>
+
+    <section class="build-detail__related" aria-labelledby="related-builds-title">
+        <div class="builds-section-heading">
+          <h2 class="eyebrow type-label" id="related-builds-title">KEEP LOOKING</h2>
+        <p class="note copy-width">More small proofs from the same working library.</p>
+      </div>
+      <div class="build-grid build-grid--related">
+        {related.map((item) => <BuildCard build={item} />)}
+      </div>
+    </section>
+  </main>
+  <SiteFooter />
+</BaseLayout>

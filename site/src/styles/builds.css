@@ -1,0 +1,120 @@
+/* Builds collection and detail pages. */
+.builds-page,
+.build-detail { min-width: 0; }
+
+.builds-hero,
+.build-detail__hero,
+.builds-grid,
+.build-detail__content,
+.build-detail__related { padding: var(--layout-section) var(--layout-gutter); }
+
+.builds-hero {
+  display: grid;
+  gap: var(--layout-section);
+  background: var(--canvas);
+  color: var(--copy);
+}
+
+.builds-hero__copy {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(16rem, .6fr);
+  gap: var(--layout-section);
+  align-items: end;
+}
+
+.builds-hero__copy .lead { margin: 0; }
+.builds-hero__note { margin: 0; border-top: var(--border-thin) solid var(--rule-strong); padding-top: var(--space-4); color: var(--quiet-copy); }
+.builds-grid { background: var(--surface); color: var(--surface-copy); }
+
+.builds-section-heading {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-8);
+  align-items: start;
+  margin-bottom: var(--layout-stack);
+}
+
+.builds-section-heading .eyebrow { margin: 0; }
+
+.build-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--layout-stack) var(--layout-gap);
+}
+
+.build-grid .build-card {
+  padding: var(--layout-inset);
+  border: var(--border-thin) solid var(--rule);
+  border-radius: var(--radius-control);
+  background: var(--interactive-surface);
+  background: color-mix(in oklch, var(--surface) 82%, var(--interactive-surface));
+  box-shadow: 0 .75rem 1.5rem color-mix(in oklch, var(--copy) 10%, transparent);
+}
+
+.build-detail {
+  --build-label-tracking: var(--tracking-breathable);
+  background: var(--canvas);
+  color: var(--copy);
+}
+.build-detail__back { display: block; padding: var(--space-6) var(--layout-gutter) 0; color: inherit; text-decoration: none; }
+.build-detail__hero { display: flex; justify-content: space-between; gap: var(--layout-section); align-items: end; }
+.build-detail__intro { max-inline-size: var(--container-lg); }
+.build-detail__intro .eyebrow { margin-bottom: var(--space-8); }
+.build-detail__intro .lead { margin-top: var(--space-8); }
+
+.build-detail__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin: var(--space-8) 0 0;
+  padding: 0;
+  list-style: none;
+  letter-spacing: var(--build-label-tracking);
+}
+
+.build-detail__tags li {
+  padding: .5rem .65rem;
+  border: var(--border-thin) solid var(--rule);
+  color: var(--quiet-copy);
+  font: 500 var(--type-meta-size)/1.2 var(--font-mono);
+}
+
+.build-detail__capture-link { display: block; margin: 0 var(--layout-gutter); color: inherit; text-decoration: none; }
+.build-detail__capture { margin: 0; overflow: clip; border: var(--border-thin) solid var(--rule); background: var(--interactive-surface); }
+.build-detail__capture picture,
+.build-detail__capture img { display: block; width: 100%; }
+.build-detail__capture img { height: auto; aspect-ratio: 8 / 5; object-fit: cover; }
+.build-detail__capture-link:is(:hover, :focus-visible) img { filter: saturate(1.08); }
+
+.build-detail__content {
+  display: grid;
+  grid-template-columns: minmax(12rem, .65fr) minmax(0, 1.35fr);
+  gap: var(--layout-section);
+  background: var(--surface);
+  color: var(--surface-copy);
+}
+
+.build-detail__content-label .eyebrow { margin-bottom: var(--space-6); }
+.build-detail__prose { max-inline-size: var(--container-md); font-size: var(--type-lead-size); }
+.build-detail__prose p + p { margin-top: var(--space-6); }
+.build-detail__prose strong { font: 500 var(--type-label-size)/1.25 var(--font-mono); letter-spacing: var(--build-label-tracking); text-transform: uppercase; }
+.build-detail__related { background: var(--canvas); color: var(--copy); }
+.build-grid--related { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+@media (width <= 64rem) {
+  .build-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .builds-hero__copy,
+  .build-detail__content { grid-template-columns: 1fr; }
+  .build-detail__hero { display: grid; }
+}
+
+@media (width <= 48rem) {
+  .build-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .builds-section-heading { display: grid; }
+ .builds-hero__copy { gap: var(--layout-section); }
+  .build-detail__capture img { aspect-ratio: auto; object-fit: contain; }
+}
+
+@media (width <= 34rem) {
+  .build-grid { grid-template-columns: 1fr; }
+}

@@ -1,0 +1,184 @@
+/* Shared demo shell ----------------------------------------------------- */
+:root {
+  --demo-canvas: Canvas;
+  --demo-copy: CanvasText;
+  --demo-muted: GrayText;
+  --demo-accent: Highlight;
+  --demo-focus: Highlight;
+  --demo-rule: oklch(50% 0 0 / .35);
+  --demo-skip-bg: CanvasText;
+  --demo-skip-copy: Canvas;
+  --demo-fluid-min-viewport: 34rem;
+  --demo-fluid-max-viewport: 104rem;
+  --demo-fluid-viewport-range: calc(var(--demo-fluid-max-viewport) - var(--demo-fluid-min-viewport));
+  --demo-fluid-progress: clamp(0, calc((100vw - var(--demo-fluid-min-viewport)) / var(--demo-fluid-viewport-range)), 1);
+  --demo-gutter: clamp(1.1rem, calc(1.1rem + (4rem - 1.1rem) * var(--demo-fluid-progress)), 4rem);
+  --demo-min-width: 18rem;
+  /* Standalone demos do not load the portfolio token sheet, so keep the
+     shared motion and layering contract local to their shell. */
+  --motion-frame: 16.67ms;
+  --motion-fast: 180ms;
+  --motion-base: 240ms;
+  --motion-slow: 360ms;
+  --motion-ease: ease-out;
+  --z-floating: 2;
+  --z-overlay: 3;
+  --tracking-roomy: .08em;
+  --radius-pill: 999px;
+  --radius-round: 50%;
+  --border-thin: 1px;
+  --border-strong: 2px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  background: var(--demo-canvas);
+}
+
+body {
+  min-width: var(--demo-min-width);
+  margin: 0;
+  background: var(--demo-canvas);
+  color: var(--demo-copy);
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+a {
+  color: inherit;
+}
+
+button {
+  font: inherit;
+}
+
+.skip-link {
+  position: fixed;
+  z-index: var(--z-overlay);
+  inset-block-start: 1rem;
+  inset-inline-start: var(--demo-gutter);
+  padding: .65rem .9rem;
+  background: var(--demo-skip-bg);
+  color: var(--demo-skip-copy);
+  font: 500 .7rem/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+  text-decoration: none;
+  transform: translateY(-200%);
+  transition: transform var(--motion-fast) var(--motion-ease);
+}
+
+.skip-link:focus-visible {
+  outline: var(--border-strong) solid var(--demo-focus);
+  outline-offset: 3px;
+  transform: translateY(0);
+}
+
+/* Shared demo tools stay quiet and reachable at the bottom centre. */
+.demo-tools {
+  position: fixed;
+  z-index: var(--z-floating);
+  right: 50%;
+  bottom: max(1rem, env(safe-area-inset-bottom));
+  display: flex;
+  align-items: center;
+  gap: .35rem;
+  width: auto;
+  padding: .35rem;
+  border: var(--border-thin) solid var(--demo-rule);
+  border-radius: var(--radius-pill);
+  background: color-mix(in oklch, var(--demo-canvas) 76%, transparent);
+  color: var(--demo-copy);
+  box-shadow: 0 .75rem 2.5rem color-mix(in oklch, var(--demo-copy) 32%, transparent),
+    inset 0 1px color-mix(in oklch, var(--demo-copy) 24%, transparent);
+  transform: translateX(50%);
+  -webkit-backdrop-filter: blur(1.25rem) saturate(145%);
+  backdrop-filter: blur(1.25rem) saturate(145%);
+  font: 500 .65rem/1.2 ui-monospace, SFMono-Regular, Menlo, monospace;
+  letter-spacing: var(--tracking-roomy);
+  text-transform: uppercase;
+}
+
+.demo-tools__tool {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.4rem;
+  height: 2.4rem;
+  padding: 0;
+  border: var(--border-thin) solid transparent;
+  border-radius: var(--radius-round);
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background-color var(--motion-fast) var(--motion-ease), border-color var(--motion-fast) var(--motion-ease),
+    color var(--motion-fast) var(--motion-ease), transform var(--motion-fast) var(--motion-ease);
+}
+
+.demo-tools__tool svg {
+  width: 1.1rem;
+  height: 1.1rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.5;
+}
+
+.demo-tools__tool:is(:hover, :focus-visible) {
+  border-color: color-mix(in oklch, var(--demo-accent) 66%, transparent);
+  background: color-mix(in oklch, var(--demo-accent) 18%, transparent);
+  color: var(--demo-accent);
+  outline: var(--border-strong) solid var(--demo-focus);
+  outline-offset: 3px;
+  transform: translateY(-2px);
+}
+
+.demo-tools__sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+:where(a, button, input):focus-visible {
+  outline: 2px solid var(--demo-focus);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    transition-duration: .01ms !important;
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+
+@media (forced-colors: active) {
+  :where(a, button, input):focus-visible {
+    outline-color: Highlight;
+  }
+}

@@ -1,0 +1,43 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import SiteHeader from '@/components/SiteHeader.astro';
+import SiteFooter from '@/components/SiteFooter.astro';
+import BuildCard from '@/components/BuildCard.astro';
+import '@/styles/builds.css';
+
+const builds = (await getCollection('builds'))
+  .sort((a, b) => Number(b.data.featured) - Number(a.data.featured) || b.data.year - a.data.year);
+---
+
+<BaseLayout
+  title="Builds — Mohanverse"
+  description="Fictional web and software build demonstrations by Mohan Kumar."
+>
+  <SiteHeader />
+  <main id="main-content" class="builds-page" transition:name="page" transition:animate="fade">
+    <header class="builds-hero">
+      <p class="eyebrow type-label">BUILDS / {String(builds.length).padStart(2, '0')}</p>
+      <div class="builds-hero__copy">
+        <h1 class="title">USEFUL<br />DIGITAL<br />THINGS.</h1>
+        <p class="lead copy-width">
+          Selected landing pages, data flows, and working interfaces—made to turn
+          an idea into a clear, usable experience.
+        </p>
+      </div>
+      <p class="builds-hero__note type-label">CAMPAIGNS · SYSTEMS · DIGITAL EXPERIENCES</p>
+    </header>
+
+    <section class="builds-grid" aria-labelledby="builds-list-title">
+      <div class="builds-section-heading">
+        <h2 class="eyebrow type-label" id="builds-list-title">SELECTED BUILDS</h2>
+        <p class="note copy-width">Each project has a visual sheet and a direct path into the experience.</p>
+      </div>
+      <div class="build-grid">
+        {builds.map((build) => <BuildCard build={build} />)}
+      </div>
+    </section>
+  </main>
+  <SiteFooter />
+</BaseLayout>
+
