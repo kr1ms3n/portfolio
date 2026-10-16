@@ -25,7 +25,7 @@ const imageSizes = '(max-width: 34rem) 100vw, (max-width: 48rem) 50vw, (max-widt
   >
     <div class="build-card__capture" transition:name={'build-cover-' + data.slug}>
       <picture>
-        {data.coverPortrait && <source media="(max-width: 48rem)" srcset={portraitSrcset} sizes={imageSizes} />}
+        {data.coverPortrait && <source media="(max-width: 48rem)" srcset={portraitSrcset} sizes={imageSizes} width="720" height="960" />}
         <img
           src={data.cover}
           srcset={landscapeSrcset}
@@ -141,6 +141,23 @@ const imageSizes = '(max-width: 34rem) 100vw, (max-width: 48rem) 50vw, (max-widt
     font: 500 var(--type-label-size)/1 var(--font-mono);
     letter-spacing: var(--tracking-roomy);
     text-transform: uppercase;
+  }
+
+  @media (width <= 48rem) {
+    .build-card__capture {
+      aspect-ratio: 3 / 4;
+      max-block-size: 24rem;
+    }
+
+    .build-card__capture picture,
+    .build-card__capture img {
+      height: 100%;
+    }
+
+    .build-card__capture img {
+      object-fit: cover;
+      object-position: top;
+    }
   }
 
   @media (prefers-reduced-motion: reduce) {

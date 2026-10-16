@@ -682,6 +682,26 @@ main>.reveal-section:nth-child(even) {
   .artifacts-deck {
     grid-template-columns: 1fr;
   }
+
+  .artifacts-deck .build-card--artifact .build-card__link {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .artifacts-deck .build-card--artifact .build-card__body {
+    order: -1;
+    padding-top: 0;
+    padding-bottom: var(--space-5);
+  }
+
+  .artifacts-deck .build-card--artifact .build-card__capture {
+    aspect-ratio: 3 / 4;
+  }
+
+  .artifacts-deck .build-card--artifact .build-card__capture img {
+    height: 100%;
+    object-fit: cover;
+  }
 }
 
 @media (hover: hover) and (pointer: fine) {

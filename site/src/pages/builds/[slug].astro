@@ -55,7 +55,7 @@ const related = (await getCollection('builds'))
       <figure class="build-detail__capture" transition:name={'build-cover-' + data.slug}>
         <picture>
           {data.coverPortrait && (
-            <source media="(max-width: 48rem)" srcset={portraitSrcset} sizes="100vw" />
+            <source media="(max-width: 48rem)" srcset={portraitSrcset} sizes="18rem" width="720" height="960" />
           )}
           <img
             src={data.cover}

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+  <defs>
+    <!-- Feather the mask alpha only; the photo itself stays crisp. -->
+    <filter id="feather" x="-15%" y="-15%" width="130%" height="130%" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="4.5" />
+    </filter>
+  </defs>
+  <path fill="white" filter="url(#feather)" transform="translate(50 50) scale(.88) translate(-50 -50)" d="M18 5C31-1 51 4 68 7c18 3 28 15 27 31-1 14-7 23-3 36 4 13-8 22-24 21-17-1-29 3-43-2C10 89 6 76 8 61 9 45-2 28 5 16 8 10 11 7 18 5Z" />
+</svg>

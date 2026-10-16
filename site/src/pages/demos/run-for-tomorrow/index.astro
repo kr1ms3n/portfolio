@@ -1,0 +1,105 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import DemoTools from '@/components/DemoTools.astro';
+import '@/styles/demo.css';
+import '@/demos/run-for-tomorrow.css';
+---
+
+<BaseLayout
+  title="Run for Tomorrow — Harborline Hospital"
+  description="A fictional community marathon campaign supporting cardiac recovery."
+>
+  <main class="run-page" id="main-content">
+    <div class="run-page__topline">
+      <span>HARBORLINE HOSPITAL</span>
+      <span>COMMUNITY MARATHON / 2026</span>
+    </div>
+    <section class="run-hero" aria-labelledby="run-title">
+      <div class="run-hero__copy">
+        <p class="run-hero__eyebrow">12 OCTOBER 2026 · RIVERSIDE GROUNDS</p>
+        <h1 id="run-title">RUN FOR<br /><em>TOMORROW.</em></h1>
+        <p class="run-hero__lede">Every kilometre helps bring better care closer to home.</p>
+        <p class="run-hero__body">Join a community marathon supporting cardiac care and rehabilitation at Harborline Hospital.</p>
+        <ul class="run-hero__runs" aria-label="Run formats">
+          <li><span class="run-ticket__number">01</span><span class="run-ticket__name">5K COMMUNITY RUN</span></li>
+          <li><span class="run-ticket__number">02</span><span class="run-ticket__name">10K TIMED RUN</span></li>
+          <li><span class="run-ticket__number">03</span><span class="run-ticket__name">HALF MARATHON</span></li>
+        </ul>
+        <div class="run-hero__actions">
+          <button class="run-button run-button--primary" type="button" commandfor="run-register" command="show-modal">Register to run <span aria-hidden="true">↗</span></button>
+          <button class="run-button run-button--quiet" type="button" commandfor="run-route" command="show-modal">See the route <span aria-hidden="true">↓</span></button>
+        </div>
+      </div>
+      <figure class="run-hero__visual">
+        <img src="/builds/run-for-tomorrow/doctors-marathon-square.png" alt="Doctors standing together for the Run for Tomorrow marathon among coconut trees" width="1254" height="1254" fetchpriority="high" />
+      </figure>
+    </section>
+    <footer class="run-page__footer">
+      <span>RUNNERS · WALKERS · FAMILIES</span>
+      <span>MOVE TOGETHER. MAKE TOMORROW STRONGER.</span>
+    </footer>
+    <span class="run-decor run-decor--circle run-decor--circle-a" aria-hidden="true"></span>
+    <span class="run-decor run-decor--circle run-decor--circle-b" aria-hidden="true"></span>
+    <span class="run-decor run-decor--plus run-decor--plus-a" aria-hidden="true">+</span>
+    <span class="run-decor run-decor--plus run-decor--plus-b" aria-hidden="true">+</span>
+  </main>
+  <dialog class="run-dialog" id="run-register" aria-labelledby="run-register-title" closedby="any">
+    <button class="run-dialog__close" type="button" commandfor="run-register" command="request-close" aria-label="Close registration">×</button>
+    <div data-run-form-view>
+      <p class="run-dialog__label">YOUR NEXT STEP / 12 OCTOBER</p>
+      <h2 id="run-register-title">Find your stride.</h2>
+      <p>Choose a distance and try your runner pass.</p>
+      <form method="dialog" data-run-register>
+        <fieldset>
+          <legend>Your distance</legend>
+          <div class="run-distance-options">
+            <label><input type="radio" name="distance" value="5K community run" checked /><span>5K</span></label>
+            <label><input type="radio" name="distance" value="10K timed run" /><span>10K</span></label>
+            <label><input type="radio" name="distance" value="Half marathon" /><span>21.1K</span></label>
+          </div>
+        </fieldset>
+        <label for="run-name">Your name</label>
+        <input id="run-name" name="runner" type="text" autocomplete="given-name" maxlength="60" pattern=".*\S.*" required />
+        <p class="run-dialog__note" id="run-demo-note">Demo pass only. No booking is made and your details stay on this page.</p>
+        <button class="run-button run-button--primary" type="submit" aria-describedby="run-demo-note">Preview my pass <span aria-hidden="true">↗</span></button>
+      </form>
+    </div>
+    <div data-run-success hidden>
+      <p class="run-dialog__label">RUN FOR TOMORROW / DEMO PASS</p>
+      <h2 id="run-pass-title" tabindex="-1" data-run-success-title>Your starting line.</h2>
+      <p data-run-runner></p>
+      <div class="run-pass"><strong data-run-distance></strong><span>12 OCTOBER 2026</span><span>RIVERSIDE GROUNDS</span></div>
+      <p class="run-dialog__note">Your preview is ready. This is a fictional event; no registration has been submitted.</p>
+      <button class="run-button run-button--quiet" type="button" data-run-edit>Edit my pass</button>
+    </div>
+  </dialog>
+
+  <dialog class="run-dialog" id="run-route" aria-labelledby="run-route-title" closedby="any">
+    <button class="run-dialog__close" type="button" commandfor="run-route" command="request-close" aria-label="Close route">×</button>
+    <p class="run-dialog__label">RIVERSIDE GROUNDS / THE COURSE</p>
+    <h2 id="run-route-title">A way forward.</h2>
+    <p>Start together at the grounds. Follow the river, find your pace and return to the finish.</p>
+    <div class="run-route-options" role="group" aria-label="Preview a run distance">
+      <button class="run-button" type="button" data-run-route="5" aria-pressed="true">5K</button>
+      <button class="run-button" type="button" data-run-route="10" aria-pressed="false">10K</button>
+      <button class="run-button" type="button" data-run-route="21" aria-pressed="false">21.1K</button>
+    </div>
+    <svg class="run-route-map" viewBox="0 0 480 260" role="img" aria-labelledby="run-map-title run-map-description">
+      <title id="run-map-title">Riverside course preview</title>
+      <desc id="run-map-description">An illustrative loop from Riverside Grounds along the river and back. A fictional course, not a navigation map.</desc>
+      <path class="run-route-map__river" d="M-20 210Q120 250 220 150T500 80" />
+      <path class="run-route-map__trail" d="M80 180L110 75Q130 30 190 50L350 55Q415 65 390 145L325 210Q270 240 210 210Z" />
+      <path data-run-course="5" d="M80 180L110 75Q130 30 190 50L235 110L210 210Z" />
+      <path data-run-course="10" hidden d="M80 180L110 75Q130 30 190 50L350 55L315 165L210 210Z" />
+      <path data-run-course="21" hidden d="M80 180L110 75Q130 30 190 50L350 55Q415 65 390 145L325 210Q270 240 210 210Z" />
+      <circle cx="80" cy="180" r="9" />
+      <text x="28" y="218">START / FINISH</text>
+      <text x="135" y="30">PARK LOOP</text>
+      <text x="295" y="247">RIVER WALK</text>
+    </svg>
+    <p class="run-route-caption" data-run-route-caption aria-live="polite">5K community run · One park loop, at your own pace.</p>
+    <p class="run-dialog__note">Illustrative course for this fictional event.</p>
+  </dialog>
+  <DemoTools overviewPath="/builds/run-for-tomorrow/" label="Demo tools" tools={['overview']} />
+  <script src="@/demos/run-for-tomorrow.js"></script>
+</BaseLayout>

@@ -112,7 +112,8 @@
   .build-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .builds-section-heading { display: grid; }
  .builds-hero__copy { gap: var(--layout-section); }
-  .build-detail__capture img { aspect-ratio: auto; object-fit: contain; }
+  .build-detail__capture { max-inline-size: 18rem; margin-inline: auto; }
+  .build-detail__capture img { aspect-ratio: 3 / 4; object-fit: contain; }
 }
 
 @media (width <= 34rem) {

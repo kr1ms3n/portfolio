@@ -21,12 +21,17 @@ export const setupDemoTools = () => {
   const toggle = document.querySelector('[data-demo-theme]');
   const themeLabel = document.querySelector('[data-demo-theme-label]');
   const reset = document.querySelector('[data-demo-reset]');
-  if (!(toggle instanceof HTMLButtonElement) || !(themeLabel instanceof HTMLElement)) return;
+  const hasTheme = toggle instanceof HTMLButtonElement && themeLabel instanceof HTMLElement;
+  const hasReset = reset instanceof HTMLButtonElement;
+  if (!hasTheme && !hasReset) return;
 
-  const systemDark = window.matchMedia('(prefers-color-scheme: dark)');
+  const systemDark = hasTheme ? window.matchMedia('(prefers-color-scheme: dark)') : null;
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-  const sync = () => applyTheme(root, resolveTheme(systemDark), toggle, themeLabel);
-  if (toggle.dataset.ready === 'true') {
+  const toolRoot = toggle?.closest('.demo-tools') || reset?.closest('.demo-tools');
+  const sync = () => {
+    if (hasTheme) applyTheme(root, resolveTheme(systemDark), toggle, themeLabel);
+  };
+  if (toolRoot?.dataset.ready === 'true') {
     sync();
     return;
   }
@@ -45,12 +50,14 @@ export const setupDemoTools = () => {
     }
   };
 
-  toggle.dataset.ready = 'true';
+  if (toolRoot) toolRoot.dataset.ready = 'true';
   sync();
   const controller = new AbortController();
   const { signal } = controller;
-  toggle.addEventListener('click', onThemeChange, { signal });
-  systemDark.addEventListener?.('change', sync, { signal });
-  reset?.addEventListener('click', onReset, { signal });
+  if (hasTheme) {
+    toggle.addEventListener('click', onThemeChange, { signal });
+    systemDark.addEventListener('change', sync, { signal });
+  }
+  if (hasReset) reset.addEventListener('click', onReset, { signal });
   document.addEventListener('astro:before-swap', () => controller.abort(), { once: true });
 };

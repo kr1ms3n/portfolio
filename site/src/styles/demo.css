@@ -109,6 +109,8 @@ button {
   text-transform: uppercase;
 }
 
+.demo-tools:empty { display: none; }
+
 .demo-tools__tool {
   position: relative;
   display: flex;
