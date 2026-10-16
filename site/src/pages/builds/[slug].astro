@@ -42,7 +42,7 @@ const related = (await getCollection('builds'))
     <header class="build-detail__hero">
       <div class="build-detail__intro">
         <p class="eyebrow type-label">{data.category} · {data.status} · {data.year}</p>
-        <h1 class="title">{data.title}</h1>
+        <h1 class="title freehand-title">{data.title}</h1>
         <p class="lead copy-width">{data.summary}</p>
         <ul class="build-detail__tags" aria-label="Capabilities and tags">
           {data.capabilities.map((capability) => <li>{capability}</li>)}

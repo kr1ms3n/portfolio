@@ -22,6 +22,7 @@
 }
 
 .chromatic__letter {
+  z-index: 2;
   display: inline;
   padding-inline: .08em;
   margin-inline: -.08em;
@@ -31,19 +32,27 @@
 @supports ((-webkit-background-clip: text) or (background-clip: text)) {
   .chromatic__letter {
     color: transparent;
-    background: radial-gradient(circle at 15% 30%, color-mix(in oklch, var(--tone-mist) 95%, var(--color-lime)) 0 10%, transparent 50%), radial-gradient(circle at 100% 120%, color-mix(in oklch, var(--color-teal) 30%, var(--color-lime)) 0 35%, transparent 50%), var(--color-lime);
+    background-image:
+      linear-gradient(118deg, transparent 32%, color-mix(in oklch, white 76%, transparent) 47%, transparent 60%),
+      radial-gradient(ellipse at 22% 8%, color-mix(in oklch, white 84%, var(--color-lime)) 0 7%, transparent 46%),
+      linear-gradient(155deg, color-mix(in oklch, white 26%, var(--color-lime)), var(--color-lime) 44%, color-mix(in oklch, var(--color-teal) 58%, var(--color-lime)) 78%, color-mix(in oklch, var(--color-coral) 24%, var(--color-lime)));
     -webkit-background-clip: text;
     background-clip: text;
-    background-size: 100% 110%;
-    background-position: -4px 4px;
+    background-size: 240% 100%, 100% 110%, 100% 100%;
+    background-position: -105% 0, center, center;
+    transition: background-position var(--motion-slow) var(--motion-ease);
   }
+}
+
+.chromatic:is(:hover, :focus-visible) .chromatic__letter {
+  background-position: 105% 0, center, center;
 }
 
 .chromatic::after,
 .chromatic::before {
   position: absolute;
   inset: 0;
-  z-index: -1;
+  z-index: 1;
   content: attr(data-chromatic);
   padding-inline: .07em;
   margin-inline: -.08em;
@@ -186,6 +195,8 @@ main>.reveal-section:nth-child(even) {
   letter-spacing: var(--tracking-roomy);
 }
 
+.hero-top.freehand-rule { border-bottom: 0; }
+
 .hero-top a {
   text-decoration: none;
 }
@@ -261,13 +272,29 @@ main>.reveal-section:nth-child(even) {
 }
 
 .hero-art {
+  position: relative;
+  isolation: isolate;
   margin: 0;
   aspect-ratio: 1;
   overflow: clip;
   will-change: transform, filter;
 }
 
+.hero-art::before {
+  position: absolute;
+  z-index: 0;
+  inset: 1%;
+  background: var(--color-teal);
+  content: "";
+  pointer-events: none;
+  transform: rotate(-8deg);
+  -webkit-mask: url('/marks/freehand-loop.svg') center / 100% 100% no-repeat;
+  mask: url('/marks/freehand-loop.svg') center / 100% 100% no-repeat;
+}
+
 .hero-art img {
+  position: relative;
+  z-index: 1;
   display: block;
   width: 100%;
   height: 100%;
@@ -340,13 +367,16 @@ main>.reveal-section:nth-child(even) {
 }
 
 .capabilities {
+  position: relative;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: var(--layout-gap);
   margin-top: var(--layout-section);
   padding-top: var(--space-8);
-  border-top: var(--border-thin) solid var(--rule);
+  border-top: 0;
 }
+
+.capabilities.freehand-rule::after { background: var(--rule); }
 
 .capabilities h3 {
   margin: var(--space-6) 0 var(--space-3);
@@ -644,6 +674,7 @@ main>.reveal-section:nth-child(even) {
 }
 
 .artifacts-deck__card {
+  position: relative;
   --card-rotate: 0deg;
   --card-lift: 0rem;
   --card-scale: 1;
@@ -651,6 +682,7 @@ main>.reveal-section:nth-child(even) {
   margin-inline: clamp(-.65rem, -1vw, -.25rem);
   padding: var(--layout-inset);
   border: var(--border-thin) solid var(--rule);
+  border-radius: 1rem .7rem 1.2rem .8rem / .8rem 1.25rem .7rem 1rem;
   background: var(--surface);
   color: var(--surface-copy);
   box-shadow: 0 .9rem 2rem color-mix(in oklch, var(--copy) 16%, transparent);
@@ -658,8 +690,25 @@ main>.reveal-section:nth-child(even) {
   transition: transform var(--motion-slow) var(--motion-ease), box-shadow var(--motion-base) var(--motion-ease);
 }
 
+.artifacts-deck__card::after {
+  position: absolute;
+  inset: .2rem -.22rem -.24rem .16rem;
+  z-index: -1;
+  border: 1px solid color-mix(in oklch, var(--color-coral) 54%, transparent);
+  border-radius: .85rem 1.15rem .75rem 1.05rem / 1.1rem .75rem 1.2rem .8rem;
+  content: "";
+  pointer-events: none;
+  transform: rotate(1deg);
+  transition: transform var(--motion-slow) var(--motion-ease), border-color var(--motion-base) var(--motion-ease);
+}
+
 .artifacts-deck__card:first-child {
   margin-inline-start: 0;
+}
+
+.artifacts-deck__card:is(:hover, :focus-within)::after {
+  border-color: color-mix(in oklch, var(--color-coral) 76%, transparent);
+  transform: rotate(-.5deg);
 }
 
 .artifacts-deck__card .build-card__body {

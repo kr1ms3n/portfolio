@@ -2,13 +2,13 @@
 :root {
   color-scheme: light dark;
   --hue: 184;
-  --tone-ink: oklch(15% .028 var(--hue));
-  --tone-mist: oklch(96.5% .012 var(--hue));
+  --tone-ink: oklch(15% .04 var(--hue));
+  --tone-mist: oklch(97% .014 var(--hue));
   --tone-signal: oklch(76% .15 var(--hue));
-  --tone-muted: oklch(35% .02 var(--hue));
-  --tone-rule: oklch(72% .02 var(--hue));
-  --tone-rule-strong: oklch(35% .03 var(--hue));
-  --tone-raised: color-mix(in oklch, var(--tone-signal) 10%, var(--tone-ink));
+  --tone-muted: oklch(35% .03 var(--hue));
+  --tone-rule: oklch(72% .025 var(--hue));
+  --tone-rule-strong: oklch(35% .04 var(--hue));
+  --tone-raised: color-mix(in oklch, var(--tone-signal) 14%, var(--tone-ink));
   --tone-on-raised: oklch(88% .045 var(--hue));
   --canvas: var(--tone-mist);
   --copy: var(--tone-ink);
@@ -173,7 +173,7 @@
   --copy: var(--tone-on-raised);
   --surface: var(--tone-raised);
   --surface-copy: var(--tone-on-raised);
-  --quiet-copy: oklch(70% .02 var(--hue));
+  --quiet-copy: oklch(70% .04 var(--hue));
   --rule: var(--tone-rule-strong);
   --rule-strong: var(--tone-rule);
   --interactive-surface: color-mix(in oklch, var(--tone-ink) 80%, var(--tone-signal));
@@ -186,7 +186,7 @@
     --copy: var(--tone-on-raised);
     --surface: var(--tone-raised);
     --surface-copy: var(--tone-on-raised);
-    --quiet-copy: oklch(70% .02 var(--hue));
+    --quiet-copy: oklch(70% .04 var(--hue));
     --rule: var(--tone-rule-strong);
     --rule-strong: var(--tone-rule);
     --interactive-surface: color-mix(in oklch, var(--tone-ink) 80%, var(--tone-signal));
@@ -342,12 +342,53 @@ h2 {
   color: var(--quiet-copy);
 }
 
+/* Small hand-drawn marks bring a looser voice to the portfolio shell. */
+.freehand-title {
+  position: relative;
+  width: fit-content;
+  max-width: 100%;
+  padding-block-end: .16em;
+}
+
+.freehand-title::after {
+  position: absolute;
+  inset-inline-start: 0;
+  inset-block-end: 0;
+  width: min(68%, 18rem);
+  height: .7rem;
+  background: var(--color-coral);
+  content: "";
+  pointer-events: none;
+  transform: rotate(-1deg);
+  -webkit-mask: url('/marks/freehand-rule.svg') left center / 100% 100% no-repeat;
+  mask: url('/marks/freehand-rule.svg') left center / 100% 100% no-repeat;
+}
+
+.freehand-rule {
+  position: relative;
+}
+
+.freehand-rule::after {
+  position: absolute;
+  inset-inline: 0;
+  height: .65rem;
+  background: color-mix(in oklch, var(--rule-strong) 82%, var(--color-teal));
+  content: "";
+  pointer-events: none;
+  -webkit-mask: url('/marks/freehand-rule.svg') center / 100% 100% no-repeat;
+  mask: url('/marks/freehand-rule.svg') center / 100% 100% no-repeat;
+}
+
+.freehand-rule--top::after { inset-block-start: 0; }
+.freehand-rule--bottom::after { inset-block-end: 0; }
+
 /* Interaction utilities */
 
 .link-underline:focus-visible,
 .link-underline:hover {
-  text-decoration: underline;
-  text-underline-offset: .3em;
+  text-decoration: underline wavy var(--color-coral);
+  text-decoration-thickness: .08em;
+  text-underline-offset: .24em;
 }
 
 .btn-link {
@@ -357,6 +398,7 @@ h2 {
   margin-top: var(--space-5);
   padding: var(--space-3) var(--space-4);
   border: var(--border-thin) solid var(--rule);
+  border-radius: .2rem .55rem .25rem .45rem;
   color: inherit;
   font: 500 var(--type-label-size)/1 var(--font-mono);
   letter-spacing: var(--tracking-roomy);
